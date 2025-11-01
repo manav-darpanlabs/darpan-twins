@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand: #C1E329;
+  --brand2: #3fb1f0;
+}
+
+body { @apply bg-bg text-white font-grotesk; }
+
+.btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-2 font-semibold transition; }
+.btn-primary { background: var(--brand); color: #0b0e14; box-shadow: 0 0 16px rgba(193,227,41,.35); }
+.btn-secondary { background: var(--brand2); color: #0b0e14; box-shadow: 0 0 16px rgba(63,177,240,.35); }
+.card { @apply rounded-2xl bg-panel border border-[#232838] shadow; }
+.chip { @apply inline-flex items-center gap-2 rounded-full border border-[#2a2f3a] px-2.5 py-1 text-sm text-gray-300; }
+

@@ -1,0 +1,26 @@
+{
+  "A": {
+    "name": "The Good Bowl",
+    "cuisine": "North Indian",
+    "dish_price": 250.0,
+    "delivery_time_min": 45,
+    "distance_km": 3.9,
+    "delivery_fee": 0.0,
+    "rating_avg": 3.9,
+    "num_reviews": 5700,
+    "coupon_text": "FLAT 50% OFF",
+    "sponsored": 0.0
+  },
+  "B": {
+    "name": "Oven Story Pizza",
+    "cuisine": "Not specified",
+    "dish_price": 579.0,
+    "delivery_time_min": 30,
+    "distance_km": 3.9,
+    "delivery_fee": 0.0,
+    "rating_avg": 4.3,
+    "num_reviews": 4900,
+    "coupon_text": "Flat ₹80 OFF above ₹199",
+    "sponsored": 0.0
+  }
+}

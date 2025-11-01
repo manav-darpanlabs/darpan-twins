@@ -1,0 +1,35 @@
+{
+  "experiment_id": "EXP-2025-11-01-001",
+  "city": "Mumbai",
+  "cohort": {"device":"Android","price_sensitivity":"high","diet":"veg"},
+  "sample_n": 100,
+  "aggregate": {"A": 0.78, "B": 0.20, "tie": 0.02, "confidence":"high"},
+  "top_reasons": [
+    {"driver":"Trust","summary":"Higher rating (4.3 vs 3.9) with 3× reviews","evidence":["rating_avg","num_reviews"]},
+    {"driver":"Price/Value","summary":"Lower payable with usable coupon","evidence":["dish_price","delivery_fee","coupon_min_order"]},
+    {"driver":"Delivery","summary":"Lower ETA for late-night cohort","evidence":["delivery_time_min"]}
+  ],
+  "segments": [
+    {"name":"Price sensitivity","buckets":[
+      {"label":"Low","A":0.61,"B":0.34,"tie":0.05},
+      {"label":"Medium","A":0.73,"B":0.24,"tie":0.03},
+      {"label":"High","A":0.87,"B":0.10,"tie":0.03}
+    ]}
+  ],
+  "drivers": {
+    "price_value": {"payable_A": 260, "payable_B": 310, "coupon_usable_A": true, "coupon_usable_B": false},
+    "delivery": {"eta_A_p50": 28, "eta_B_p50": 42},
+    "trust": {"rating_A": 4.3, "reviews_A": 1200, "rating_B": 3.9, "reviews_B": 380},
+    "fit": {"cuisine_match_A": 0.72, "cuisine_match_B": 0.41}
+  },
+  "recommended_actions": [
+    "Lower B’s min order to ₹299",
+    "Ensure ETA < 35m for late-night cohort",
+    "Swap B’s coupon to flat ₹40 off"
+  ],
+  "twins": [
+    {"id":"C0007","winner":"A","reason":"Prefers higher rating; coupon meets threshold; ETA 25m acceptable"},
+    {"id":"C0011","winner":"B","reason":"Spicy cuisine preference; discount attractive despite ETA"}
+  ]
+}
+

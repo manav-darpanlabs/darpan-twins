@@ -1,0 +1,29 @@
+{
+  "drivers": {
+    "rating": [
+      "Higher rating reduces risk.",
+      "Quality looks better."
+    ],
+    "eta": [
+      "Faster delivery suits me now.",
+      "I don’t want to wait long."
+    ],
+    "for_you": [
+      "Feels tailored to my taste.",
+      "Personalized pick matches history."
+    ],
+    "popular": [
+      "Many others chose it—safer.",
+      "Crowd wisdom matters."
+    ],
+    "discount": [
+      "Good value with the discount.",
+      "Saving money matters today."
+    ],
+    "sponsored": [
+      "I avoid sponsored results.",
+      "Organic results feel more genuine."
+    ]
+  }
+}
+

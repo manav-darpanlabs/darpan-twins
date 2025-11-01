@@ -1,0 +1,74 @@
+[
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 13:00, ~24°C, rain 1.3mm",
+    "action": "B",
+    "rationale": "Given the current context and your preference for lower dish prices, opting for option B seems like a sensible choice."
+  },
+  {
+    "user_id": "USER_002",
+    "context_summary": "at 13:00, ~24°C, rain 1.3mm",
+    "action": "B",
+    "rationale": "Understood. Given the current context and your conscientious nature, it seems appropriate to prioritize tasks that require focus and organization."
+  },
+  {
+    "user_id": "USER_002",
+    "context_summary": "at 13:00, ~24°C, rain 1.3mm",
+    "action": "B",
+    "rationale": "Understood. Given the context and your traits, it's a good time to focus on tasks that require organization and planning. Stay productive!"
+  },
+  {
+    "user_id": "USER_002",
+    "context_summary": "at 13:00, ~24°C",
+    "action": "B",
+    "rationale": "This restaurant card offers high-quality cuisine and excellent service, ensuring great overall value for your dining experience."
+  },
+  {
+    "user_id": "USER_006",
+    "context_summary": "at 13:00, ~24°C",
+    "action": "B",
+    "rationale": "This restaurant offers delicious dishes at lower prices, making it the better pick for a satisfying meal."
+  },
+  {
+    "user_id": "USER_006",
+    "context_summary": "at 13:00, ~24°C",
+    "action": "B",
+    "rationale": "This restaurant card offers delicious dishes at lower prices, making it the best choice for a satisfying meal."
+  },
+  {
+    "user_id": "USER_006",
+    "context_summary": "at 13:00, ~24°C",
+    "action": "B",
+    "rationale": "This restaurant offers top-rated dishes and excellent delivery, ensuring a satisfying dining experience."
+  },
+  {
+    "user_id": "USER_006",
+    "context_summary": "at 13:00, ~24°C",
+    "action": "B",
+    "rationale": "This restaurant offers authentic Thai cuisine, perfectly matching your taste for flavorful dishes in this lovely weather."
+  },
+  {
+    "user_id": "USER_006",
+    "context_summary": "at 13:00, ~24°C",
+    "action": "B",
+    "rationale": "This restaurant offers authentic Thai cuisine that perfectly matches your taste preferences."
+  },
+  {
+    "user_id": "USER_008",
+    "context_summary": "at 13:00, ~24°C",
+    "action": "B",
+    "rationale": "This restaurant offers authentic Thai cuisine, perfectly aligning with your taste for flavorful dishes."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 13:00, ~24°C, annual income ₹600000",
+    "action": "A",
+    "rationale": "This restaurant card offers great value with diverse options and quality, enhancing your dining experience."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 13:00, ~24°C, annual income ₹600000",
+    "action": "A",
+    "rationale": "This restaurant card offers lower dish prices, making it a budget-friendly choice for delicious meals."
+  }
+]
