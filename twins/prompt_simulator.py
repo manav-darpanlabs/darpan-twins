@@ -3,7 +3,6 @@ import os
 import re
 from typing import Any, Dict, List, Tuple, Optional, Callable
 
-import joblib
 import numpy as np
 import pandas as pd
 
@@ -80,11 +79,7 @@ class LikertScorer:
     def __init__(self, model_dir: str = "models", client: Optional[LLMClient] = None) -> None:
         self.path = os.path.join(model_dir, "likert_pipeline.pkl")
         self.pipe = None
-        if os.path.exists(self.path):
-            try:
-                self.pipe = joblib.load(self.path)
-            except Exception:
-                self.pipe = None
+        # ML model loading removed - LLM-only architecture uses LLMClient for scoring
         self.client = client
 
     @staticmethod

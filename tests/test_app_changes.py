@@ -4,8 +4,8 @@
 import sys
 import os
 
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add project root to path (parent of tests directory)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import the functions we modified
 from app_streamlit import format_factor, aggregate_results, DEFAULT_CITIES

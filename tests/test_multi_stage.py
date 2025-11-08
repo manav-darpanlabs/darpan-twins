@@ -9,8 +9,8 @@ It verifies the code structure and fallback mechanisms work correctly.
 import sys
 from pathlib import Path
 
-# Add project root to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Add project root to path (parent of tests directory)
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from twins.twin_runtime import TwinRuntime
 

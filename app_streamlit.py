@@ -837,84 +837,47 @@ def main() -> None:
 
     # Page 0: Introduction/Landing Page
     if step == 0:
-        st.markdown("""
-        <div class="panel" style="background: linear-gradient(135deg, hsl(0,0%,14%), hsl(0,0%,10%)); border-color: var(--brand2);">
-            <h1 style="text-align: center; font-size: var(--text-3xl); margin-bottom: var(--space-6);">
-                Welcome to <span style="color: var(--brand);">Darpan Twins Lab</span>
-            </h1>
+        st.title("Welcome to Darpan Twins Lab")
+        st.markdown("Experience the future of customer insights through AI-powered digital twin simulations")
 
-            <p style="text-align: center; font-size: var(--text-lg); color: var(--muted); margin-bottom: var(--space-8);">
-                Experience the future of customer insights through AI-powered digital twin simulations
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.divider()
 
         # Feature cards in columns
         col1, col2, col3 = st.columns(3)
 
         with col1:
-            st.markdown("""
-            <div class="panel">
-                <h3 style="color: var(--brand); margin-bottom: var(--space-3);">🧬 Digital Twins</h3>
-                <p style="color: var(--muted); font-size: var(--text-sm);">
-                    1,000+ unique AI personas based on real personality traits (OCEAN model)
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.subheader("🧬 Digital Twins")
+            st.write("1,000+ unique AI personas based on real personality traits (OCEAN model)")
 
         with col2:
-            st.markdown("""
-            <div class="panel">
-                <h3 style="color: var(--brand2); margin-bottom: var(--space-3);">🎯 Real Decisions</h3>
-                <p style="color: var(--muted); font-size: var(--text-sm);">
-                    Watch twins make restaurant choices based on personality, weather, and context
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.subheader("🎯 Real Decisions")
+            st.write("Watch twins make restaurant choices based on personality, weather, and context")
 
         with col3:
-            st.markdown("""
-            <div class="panel">
-                <h3 style="color: var(--success); margin-bottom: var(--space-3);">📊 Rich Analytics</h3>
-                <p style="color: var(--muted); font-size: var(--text-sm);">
-                    Detailed insights into decision factors, confidence scores, and reasoning
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.subheader("📊 Rich Analytics")
+            st.write("Detailed insights into decision factors, confidence scores, and reasoning")
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.divider()
 
         # How it works section
-        st.markdown("""
-        <div class="section-header">🚀 How It Works</div>
+        st.subheader("🚀 How It Works")
+        st.write("""
+1. **Select Location:** Choose a city, weather data is fetched automatically
+2. **Upload Cards:** Upload images of two restaurant options (PNG/JPG)
+3. **Run Simulation:** 10 digital twins analyze and choose between options
+4. **View Results:** See aggregate choices, top factors, and detailed reasoning
+        """)
 
-        <div style="margin-bottom: var(--space-6);">
-            <ol style="font-size: var(--text-base); line-height: 2;">
-                <li><strong>Select Location:</strong> Choose a city, weather data is fetched automatically</li>
-                <li><strong>Upload Cards:</strong> Upload images of two restaurant options (PNG/JPG)</li>
-                <li><strong>Run Simulation:</strong> 10 digital twins analyze and choose between options</li>
-                <li><strong>View Results:</strong> See aggregate choices, top factors, and detailed reasoning</li>
-            </ol>
-        </div>
-        """, unsafe_allow_html=True)
+        st.divider()
 
         # Stats section
-        st.markdown("""
-        <div style="display: flex; gap: var(--space-8); justify-content: center; margin: var(--space-8) 0;">
-            <div style="text-align: center;">
-                <div style="font-size: var(--text-3xl); font-weight: 700; color: var(--brand);">1,000+</div>
-                <div style="font-size: var(--text-sm); color: var(--muted);">Digital Twins</div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: var(--text-3xl); font-weight: 700; color: var(--brand2);">10K+</div>
-                <div style="font-size: var(--text-sm); color: var(--muted);">Training Examples</div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: var(--text-3xl); font-weight: 700; color: var(--success);">30s</div>
-                <div style="font-size: var(--text-sm); color: var(--muted);">Avg. Runtime</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Digital Twins", "1,000+")
+        with col2:
+            st.metric("Training Examples", "10K+")
+        with col3:
+            st.metric("Avg. Runtime", "30s")
 
         # CTA Button
         st.markdown("<br>", unsafe_allow_html=True)
