@@ -73,10 +73,19 @@ class TwinRuntime:
             "rationale": result["rationale"],
             "chat": result["rationale"],
             "meta": {
+                "confidence": result.get("confidence"),
+                "key_factors": result.get("key_factors", []),
+                "prompt": result.get("prompt"),
+                "memories": memories,
+
+                # Multi-stage LLM pipeline metadata
+                "decider_response": result.get("decider_response"),
+                "analyst_extraction": result.get("analyst_extraction"),
+                "agent_pipeline": result.get("agent_pipeline"),
+
+                # Legacy fields (now None for LLM-only architecture)
                 "prob_A": result.get("prob_A"),
                 "score_margin": result.get("score_margin"),
                 "drivers": result.get("drivers"),
-                "prompt": result.get("prompt"),
-                "memories": memories,
             },
         }

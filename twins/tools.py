@@ -1,9 +1,10 @@
 import os
+import json
 from dotenv import load_dotenv, find_dotenv
 from typing import Dict, Any, List
 
-from .policy_model import PolicyModel
-from .prompts import drivers_to_phrases, build_llm_prompt, fallback_rationale
+from .rag_retriever import RAGRetriever
+from .prompts_llm import build_decider_prompt, build_analyst_prompt
 
 
 class LLMClient:
@@ -148,8 +149,101 @@ class LLMClient:
 
 class DecisionTool:
     def __init__(self, model_dir: str = "models") -> None:
-        self.policy = PolicyModel(model_dir=model_dir)
+        """
+        Initialize DecisionTool with LLM + RAG architecture.
+
+        Args:
+            model_dir: Kept for backward compatibility, but no longer used for ML models
+        """
         self.llm = LLMClient()
+        self.rag = RAGRetriever(llm_client=self.llm)
+
+    def _call_decider(self, prompt: str) -> str:
+        """
+        Stage 1: The Decider - Generates natural text decision explanation.
+
+        The Decider makes the restaurant choice and explains reasoning naturally,
+        without structured output requirements.
+
+        Args:
+            prompt: The comprehensive decision prompt with personality, context, cards
+
+        Returns:
+            str: Natural text response (2-3 paragraphs) explaining the decision
+        """
+        response: str = self.llm.generate(
+            prompt,
+            temperature=0.3,  # Balanced consistency with natural variation
+            max_tokens=500
+        )
+        return response
+
+    def _call_analyst(self, decider_text: str) -> Dict[str, Any]:
+        """
+        Stage 2: The Analyst - Extracts structured data from The Decider's text.
+
+        The Analyst parses the natural language response and extracts:
+        - choice (A or B)
+        - confidence (0.0-1.0)
+        - reasoning (summarized)
+        - key_factors (list of influencing factors)
+
+        Args:
+            decider_text: The Decider's natural text response
+
+        Returns:
+            Dict[str, Any]: Extracted structured data with keys:
+                - choice (str): "A" or "B"
+                - confidence (float): 0.0-1.0
+                - reasoning (str): Summarized rationale
+                - key_factors (List[str]): Key decision factors
+                - extraction_status (str): "success" or error message
+        """
+        # Build extraction prompt
+        analyst_prompt = build_analyst_prompt(decider_text)
+
+        # Call The Analyst with lower temperature (more deterministic)
+        analyst_response = self.llm.generate(
+            analyst_prompt,
+            temperature=0.1,
+            max_tokens=300
+        )
+
+        # Try to parse JSON response
+        try:
+            extracted = json.loads(analyst_response)
+
+            # Validate and sanitize extracted data
+            choice = str(extracted.get("choice", "A")).upper()
+            if choice not in ["A", "B"]:
+                choice = "A"
+
+            confidence = float(extracted.get("confidence", 0.5))
+            confidence = max(0.0, min(1.0, confidence))  # Clamp to [0, 1]
+
+            reasoning = str(extracted.get("reasoning", ""))[:500]  # Truncate if too long
+
+            key_factors = extracted.get("key_factors", [])
+            if not isinstance(key_factors, list):
+                key_factors = []
+
+            return {
+                "choice": choice,
+                "confidence": confidence,
+                "reasoning": reasoning,
+                "key_factors": key_factors,
+                "extraction_status": "success"
+            }
+
+        except (json.JSONDecodeError, ValueError, KeyError) as e:
+            # Fallback: Use defaults
+            return {
+                "choice": "A",
+                "confidence": 0.5,
+                "reasoning": decider_text[:200] if decider_text else "Unable to extract reasoning.",
+                "key_factors": [],
+                "extraction_status": f"failed: {str(e)}"
+            }
 
     def choose(
         self,
@@ -160,36 +254,82 @@ class DecisionTool:
         card_a: Dict[str, float],
         card_b: Dict[str, float],
     ) -> Dict[str, Any]:
-        result = self.policy.predict_action(card_a=card_a, card_b=card_b, context=context_vec)
-        action = result.get("action", "A")
-        drivers = result.get("drivers", [])
-        phrases: List[str] = drivers_to_phrases(drivers)
-        # Guardrail: if we somehow only extract personality features (ctx_*), reduce to generic "overall"
-        if all(p.startswith("ctx_") or p.startswith("cuisine ") for p in phrases):
-            phrases = [p for p in phrases if not p.startswith("ctx_")]
-            if not phrases:
-                phrases = ["overall value"]
+        """
+        Make a decision between two restaurant cards using multi-stage LLM pipeline with RAG.
 
-        prompt = build_llm_prompt(
+        Pipeline:
+            1. RAG Retrieval: Find 10 similar past decisions based on personality/context
+            2. Stage 1 (The Decider): Generate natural text explanation of choice
+            3. Stage 2 (The Analyst): Extract structured data from natural text
+            4. Return combined results with full pipeline metadata
+
+        Args:
+            user_name: User identifier or name
+            ocean: OCEAN personality traits (openness, conscientiousness, etc.)
+            context_summary: Human-readable context (e.g., "19:00, weekday, 28°C")
+            context_vec: Full context features including demographics
+            card_a: Restaurant A attributes (rating, price, distance, etc.)
+            card_b: Restaurant B attributes (rating, price, distance, etc.)
+
+        Returns:
+            Dict[str, Any] with keys:
+                - action (str): "A" or "B" - the chosen card
+                - rationale (str): Natural language explanation
+                - confidence (float): 0.0-1.0 confidence score
+                - key_factors (List[str]): Main decision factors
+                - prompt (str): Full prompt sent to Decider (for debugging)
+                - decider_response (str): Raw Decider output
+                - analyst_extraction (Dict): Raw Analyst output
+                - agent_pipeline (Dict): Pipeline status metadata
+                - Legacy fields set to None: prob_A, score_margin, drivers
+        """
+        # 1. Retrieve similar past decisions from RAG
+        similar_decisions = self.rag.get_similar(
+            user_profile=ocean,
+            context=context_vec,
+            k=10
+        )
+
+        # 2. Build comprehensive decision prompt for The Decider
+        decider_prompt = build_decider_prompt(
             user_name=user_name,
             ocean=ocean,
-            values_top3=phrases[:3],
+            demographics=context_vec,
             context_summary=context_summary,
-            action=action,
-            drivers=phrases,
+            card_a=card_a,
+            card_b=card_b,
+            past_decisions=similar_decisions
         )
-        llm_text = self.llm.generate(prompt)
-        rationale_source = "llm" if llm_text else "fallback"
-        if not llm_text:
-            llm_text = fallback_rationale(action, phrases)
+
+        # 3. Stage 1: The Decider generates natural text response
+        decider_response = self._call_decider(decider_prompt)
+
+        # 4. Stage 2: The Analyst extracts structured data
+        analyst_extraction = self._call_analyst(decider_response)
+
+        # 5. Build output (maintaining backward-compatible interface)
         out: Dict[str, Any] = {
-            "action": action,
-            "rationale": llm_text,
-            "prob_A": result.get("prob_A"),
-            "score_margin": result.get("score_margin"),
-            "drivers": drivers,
-            "prompt": prompt,
-            "rationale_source": rationale_source,
+            # Primary outputs (from The Analyst)
+            "action": analyst_extraction["choice"],
+            "rationale": analyst_extraction["reasoning"],
+            "confidence": analyst_extraction["confidence"],
+            "key_factors": analyst_extraction["key_factors"],
+
+            # Pipeline metadata
+            "prompt": decider_prompt,
+            "decider_response": decider_response,
+            "analyst_extraction": analyst_extraction,
+            "agent_pipeline": {
+                "stage_1": "The Decider",
+                "stage_2": "The Analyst",
+                "extraction_status": analyst_extraction.get("extraction_status", "unknown")
+            },
+
+            # Legacy fields for backward compatibility (set to None)
+            "prob_A": None,
+            "score_margin": None,
+            "drivers": [],
+            "rationale_source": "multi_stage_llm"
         }
 
         return out

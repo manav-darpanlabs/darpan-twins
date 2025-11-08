@@ -1,0 +1,277 @@
+{
+  "summary": {
+    "train_rows": 300600,
+    "test_rows": 299400,
+    "total_rows": 600000,
+    "train_users": 501,
+    "test_users": 499,
+    "total_users": 1000,
+    "user_overlap": 0,
+    "datasets_independent": true
+  },
+  "data_quality": {
+    "train": {
+      "total_rows": 300600,
+      "total_columns": 45,
+      "missing_values": {},
+      "duplicate_rows": 0,
+      "issues": []
+    },
+    "test": {
+      "total_rows": 299400,
+      "total_columns": 45,
+      "missing_values": {},
+      "duplicate_rows": 0,
+      "issues": []
+    }
+  },
+  "distributions": {
+    "train": {
+      "age": {
+        "mean": 30.88822355289421,
+        "std": 7.977744316358125,
+        "min": 18,
+        "max": 61,
+        "median": 30.0
+      },
+      "gender": {
+        "counts": {
+          "male": 128400,
+          "female": 154800,
+          "other": 17400
+        },
+        "percentages": {
+          "male": 42.71457085828344,
+          "female": 51.49700598802395,
+          "other": 5.788423153692615
+        }
+      },
+      "income": {
+        "mean": 638112.0783334126,
+        "std": 448838.7049556465,
+        "median": 522651.5193293555,
+        "min": 100000.0,
+        "max": 3342186.553108657
+      },
+      "ocean": {
+        "ctx_openness": {
+          "mean": 0.5513898431966303,
+          "std": 0.15406238679442394,
+          "min": 0.1371495308382589,
+          "max": 1.0
+        },
+        "ctx_conscientiousness": {
+          "mean": 0.47670209554435017,
+          "std": 0.18731486407721995,
+          "min": 0.0,
+          "max": 1.0
+        },
+        "ctx_extraversion": {
+          "mean": 0.5215607508380166,
+          "std": 0.17724276740537184,
+          "min": 0.002292908740186,
+          "max": 1.0
+        },
+        "ctx_agreeableness": {
+          "mean": 0.5525561880735168,
+          "std": 0.1514733693858605,
+          "min": 0.0589476375550014,
+          "max": 1.0
+        },
+        "ctx_neuroticism": {
+          "mean": 0.4308436169222562,
+          "std": 0.19354475879255928,
+          "min": 0.0,
+          "max": 1.0
+        }
+      },
+      "preferences": {
+        "ctx_novelty_seeking": {
+          "mean": 0.542962261574336,
+          "std": 0.1251205063108274
+        },
+        "ctx_budget_sensitivity": {
+          "mean": 0.3939223997580751,
+          "std": 0.21779408523062568
+        },
+        "ctx_distance_tolerance": {
+          "mean": 0.2943498325129153,
+          "std": 0.12690767327933541
+        },
+        "ctx_rating_focus": {
+          "mean": 0.507043732556017,
+          "std": 0.13062035654099166
+        }
+      },
+      "hour_of_day": {
+        "mean": 15.008622754491018,
+        "min": 7,
+        "max": 23
+      },
+      "weekend_pct": 30.020958083832333,
+      "temperature_c": {
+        "mean": 23.99625914836992,
+        "std": 6.004819505168561
+      },
+      "weather_codes": {
+        "clear": 105531,
+        "cloudy": 60229,
+        "rain": 59677,
+        "hot": 30009,
+        "snow": 15316,
+        "storm": 14972,
+        "cold": 14866
+      },
+      "rationale_labels": {
+        "popular": 138113,
+        "eta": 91788,
+        "discount": 30525,
+        "rating": 29670,
+        "sponsored": 10411,
+        "for_you": 93
+      }
+    },
+    "test": {
+      "age": {
+        "mean": 31.070140280561123,
+        "std": 7.563576949116868,
+        "min": 18,
+        "max": 56,
+        "median": 30.0
+      },
+      "gender": {
+        "counts": {
+          "male": 135600,
+          "female": 153600,
+          "other": 10200
+        },
+        "percentages": {
+          "male": 45.29058116232465,
+          "female": 51.302605210420836,
+          "other": 3.406813627254509
+        }
+      },
+      "income": {
+        "mean": 622827.1461537825,
+        "std": 395515.6760187188,
+        "median": 509943.4432167476,
+        "min": 100000.0,
+        "max": 2978746.9904663046
+      },
+      "ocean": {
+        "ctx_openness": {
+          "mean": 0.5589414533158334,
+          "std": 0.1501502064519473,
+          "min": 0.11160514467482,
+          "max": 1.0
+        },
+        "ctx_conscientiousness": {
+          "mean": 0.49039345233869563,
+          "std": 0.17869004997793786,
+          "min": 0.0654562171834043,
+          "max": 0.972028385282678
+        },
+        "ctx_extraversion": {
+          "mean": 0.5263100514975451,
+          "std": 0.16984494612378762,
+          "min": 0.0404984681243667,
+          "max": 1.0
+        },
+        "ctx_agreeableness": {
+          "mean": 0.5537507268549717,
+          "std": 0.14928156001673704,
+          "min": 0.1011554955679258,
+          "max": 0.987941097465394
+        },
+        "ctx_neuroticism": {
+          "mean": 0.42864370663554985,
+          "std": 0.17623171874578464,
+          "min": 0.0,
+          "max": 0.9868941590157037
+        }
+      },
+      "preferences": {
+        "ctx_novelty_seeking": {
+          "mean": 0.5441409816194748,
+          "std": 0.1184175347524821
+        },
+        "ctx_budget_sensitivity": {
+          "mean": 0.38641111447605236,
+          "std": 0.21453353886428506
+        },
+        "ctx_distance_tolerance": {
+          "mean": 0.29919661796795693,
+          "std": 0.122282356045316
+        },
+        "ctx_rating_focus": {
+          "mean": 0.5157363621452059,
+          "std": 0.12210073015250124
+        }
+      },
+      "hour_of_day": {
+        "mean": 15.007037408149632,
+        "min": 7,
+        "max": 23
+      },
+      "weekend_pct": 29.993319973279892,
+      "temperature_c": {
+        "mean": 24.001820641282567,
+        "std": 5.99114166036925
+      },
+      "weather_codes": {
+        "clear": 104651,
+        "cloudy": 59978,
+        "rain": 59915,
+        "hot": 30138,
+        "snow": 15005,
+        "storm": 14944,
+        "cold": 14769
+      },
+      "rationale_labels": {
+        "popular": 136999,
+        "eta": 91974,
+        "discount": 30261,
+        "rating": 29713,
+        "sponsored": 10358,
+        "for_you": 95
+      }
+    }
+  },
+  "class_balance": {
+    "train": {
+      "action_A_count": 149699,
+      "action_B_count": 150901,
+      "action_A_pct": 49.80006653359947,
+      "action_B_pct": 50.19993346640054,
+      "is_balanced": true
+    },
+    "test": {
+      "action_A_count": 149921,
+      "action_B_count": 149479,
+      "action_A_pct": 50.07381429525718,
+      "action_B_pct": 49.92618570474282,
+      "is_balanced": true
+    }
+  },
+  "comparison": {
+    "age_diff": 0.1819167276669127,
+    "income_diff_pct": 2.3953366028661502,
+    "ocean_trait_diffs": {
+      "ctx_openness": 0.007551610119203134,
+      "ctx_conscientiousness": 0.013691356794345466,
+      "ctx_extraversion": 0.004749300659528499,
+      "ctx_agreeableness": 0.0011945387814549235,
+      "ctx_neuroticism": 0.0021999102867063525
+    },
+    "is_similar": true
+  },
+  "validation_status": {
+    "user_independence": true,
+    "train_quality_ok": true,
+    "test_quality_ok": true,
+    "train_balanced": true,
+    "test_balanced": true,
+    "distributions_similar": true,
+    "all_checks_passed": true
+  }
+}

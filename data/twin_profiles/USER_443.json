@@ -1,0 +1,18 @@
+{
+  "user_id": "USER_443",
+  "name": "User 443",
+  "OCEAN": {
+    "openness": 0.3771264111004427,
+    "conscientiousness": 0.7571843360059177,
+    "extraversion": 0.5075937086333515,
+    "agreeableness": 0.6599710527534648,
+    "neuroticism": 0.29874120063800896
+  },
+  "demographics": {
+    "age": 27,
+    "gender": "female",
+    "income": 783348.6646986246,
+    "place_of_birth_avg_income": 317456.5016550166,
+    "place_of_birth_food_variety_index": 0.5998154682731209
+  }
+}

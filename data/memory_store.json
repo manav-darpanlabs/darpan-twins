@@ -70,5 +70,119 @@
     "context_summary": "at 13:00, ~24°C, annual income ₹600000",
     "action": "A",
     "rationale": "This restaurant card offers lower dish prices, making it a budget-friendly choice for delicious meals."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Unable to extract reasoning."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A because sushi offers a unique dining experience that aligns with their adventurous personality and desire for novelty."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A because of its higher rating and the appealing Italian cuisine that aligns with an adventurous personality."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "B",
+    "rationale": "Chose Card B due to its high rating and the appeal of Thai cuisine, which aligns with a desire for new flavors."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and appealing Italian cuisine, which aligns with their personality and preferences."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A because of significantly better rating and novel cuisine that matches adventurous personality."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A because the unique experience of sushi appeals to their adventurous personality, despite both options having the same rating."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A because of significantly better rating and novel cuisine that matches adventurous personality."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "B",
+    "rationale": "Chose Card B due to the excitement for Thai cuisine and the high rating of 4.7 stars, which suggests a popular choice among customers."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and the appeal of trying sushi, which aligns with their preferences for quality and novelty."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and the appeal of sushi as a more interesting dining option."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and the preference for sushi over pizza, which aligns with a desire for quality dining."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and preference for sushi, which aligns with a desire for quality and novelty."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and preference for sushi over pizza, which aligns with their personality traits."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and preference for sushi over pizza, valuing quality and reliability."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and the appeal of trying sushi, which aligns with a desire for quality and new experiences."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and substantial reviews, indicating a better dining experience, along with a preference for sushi over pizza."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and the appeal of trying a different cuisine, which aligns with their personality traits."
+  },
+  {
+    "user_id": "USER_042",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and the appeal of sushi over pizza, aligning with a desire for quality dining."
   }
 ]

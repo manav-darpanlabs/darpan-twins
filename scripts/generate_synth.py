@@ -339,17 +339,52 @@ def make_row(
     return row
 
 
-def load_profiles(profile_dir: str) -> List[UserProfile]:
+def load_profiles(profile_dir: str, user_range: str = None) -> List[UserProfile]:
+    """
+    Load user profiles from JSON files.
+
+    Args:
+        profile_dir: Directory containing user profile JSON files
+        user_range: Optional range filter in format "USER_001:USER_500" (inclusive)
+
+    Returns:
+        List of UserProfile objects
+    """
     profiles: List[UserProfile] = []
+
+    # Parse user_range if provided
+    start_user = None
+    end_user = None
+    if user_range:
+        try:
+            parts = user_range.split(":")
+            if len(parts) == 2:
+                start_user = parts[0].strip()
+                end_user = parts[1].strip()
+        except Exception:
+            print(f"Warning: Invalid user_range format '{user_range}'. Expected format: 'USER_001:USER_500'")
+
     if os.path.isdir(profile_dir):
         for fname in sorted(os.listdir(profile_dir)):
             if not fname.endswith(".json"):
                 continue
+
+            # Extract user_id from filename (e.g., "USER_001.json" -> "USER_001")
+            user_id = os.path.splitext(fname)[0]
+
+            # Filter by user_range if specified
+            if start_user and end_user:
+                if not (start_user <= user_id <= end_user):
+                    continue
+
             try:
                 profiles.append(UserProfile.from_json(os.path.join(profile_dir, fname)))
-            except Exception:
+            except Exception as e:
+                print(f"Warning: Failed to load {fname}: {e}")
                 continue
+
     if not profiles:
+        print("Warning: No profiles loaded. Using default profile.")
         profiles = [
             UserProfile(
                 user_id="USER_DEFAULT",
@@ -358,32 +393,87 @@ def load_profiles(profile_dir: str) -> List[UserProfile]:
                 extraversion=0.5,
                 agreeableness=0.6,
                 neuroticism=0.45,
+                age=30,
+                gender="male",
+                income=600000.0,
+                place_of_birth_avg_income=300000.0,
+                place_of_birth_food_variety_index=0.6,
             )
         ]
     return profiles
 
 
-def run(output_path: str, interactions_per_user: int, seed: int, profile_dir: str) -> pd.DataFrame:
+def run(output_path: str, interactions_per_user: int, seed: int, profile_dir: str, user_range: str = None) -> pd.DataFrame:
+    """
+    Generate synthetic interaction data for users.
+
+    Args:
+        output_path: Path to output CSV file
+        interactions_per_user: Number of interactions to generate per user
+        seed: Random seed for reproducibility
+        profile_dir: Directory containing user profile JSON files
+        user_range: Optional range filter in format "USER_001:USER_500"
+
+    Returns:
+        DataFrame with generated interaction data
+    """
+    import time
     rng = np.random.default_rng(seed)
-    profiles = load_profiles(profile_dir)
+    profiles = load_profiles(profile_dir, user_range=user_range)
+
+    print(f"\nGenerating synthetic data...")
+    print(f"Users: {len(profiles)} ({profiles[0].user_id} to {profiles[-1].user_id})")
+    print(f"Interactions per user: {interactions_per_user}")
+    print(f"Total rows: {len(profiles) * interactions_per_user:,}")
+    print(f"Random seed: {seed}")
+    print("-" * 60)
 
     rows: List[Dict[str, object]] = []
-    for profile in profiles:
+    start_time = time.time()
+
+    for idx, profile in enumerate(profiles):
         for t in range(interactions_per_user):
             rows.append(make_row(profile, rng, t))
 
+        # Progress update every 10 users
+        if (idx + 1) % 10 == 0 or idx == len(profiles) - 1:
+            elapsed = time.time() - start_time
+            rate = len(rows) / elapsed if elapsed > 0 else 0
+            progress_pct = (idx + 1) / len(profiles) * 100
+            rows_generated = len(rows)
+            print(f"✓ {profile.user_id} - Progress: {idx + 1}/{len(profiles)} users "
+                  f"({progress_pct:.1f}%) | {rows_generated:,} rows | "
+                  f"Rate: {rate:.0f} rows/sec")
+
+    print("\nBuilding DataFrame...")
     df = pd.DataFrame(rows)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    print(f"Saving to {output_path}...")
+    os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else ".", exist_ok=True)
     df.to_csv(output_path, index=False)
+
+    elapsed = time.time() - start_time
+    print("\n" + "=" * 60)
+    print("GENERATION COMPLETE")
+    print("=" * 60)
+    print(f"✓ Total rows: {len(df):,}")
+    print(f"✓ Total users: {len(profiles)}")
+    print(f"⏱  Time: {elapsed/60:.1f} minutes ({elapsed:.1f} seconds)")
+    print(f"📊 Rate: {len(df)/elapsed:.0f} rows/sec")
+    print(f"📁 Output: {output_path}")
+    print(f"💾 File size: {os.path.getsize(output_path) / 1024 / 1024:.1f} MB")
+    print("=" * 60)
+
     return df
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate synthetic CAR data with time/weather and card schema diffs")
-    parser.add_argument("--output", type=str, default="data/choices.csv")
-    parser.add_argument("--profile_dir", type=str, default="data/twin_profiles")
-    parser.add_argument("--interactions_per_user", type=int, default=400)
-    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--output", type=str, default="data/choices.csv", help="Output CSV file path")
+    parser.add_argument("--profile_dir", type=str, default="data/twin_profiles", help="Directory containing user profile JSONs")
+    parser.add_argument("--interactions_per_user", type=int, default=400, help="Number of interactions per user")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
+    parser.add_argument("--user_range", type=str, default=None, help="User range filter (e.g., 'USER_001:USER_500')")
 
     args = parser.parse_args()
     run(
@@ -391,6 +481,7 @@ def main() -> None:
         interactions_per_user=args.interactions_per_user,
         seed=args.seed,
         profile_dir=args.profile_dir,
+        user_range=args.user_range,
     )
 
 

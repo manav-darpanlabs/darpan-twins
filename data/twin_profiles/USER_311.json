@@ -1,0 +1,18 @@
+{
+  "user_id": "USER_311",
+  "name": "User 311",
+  "OCEAN": {
+    "openness": 0.6982054746952313,
+    "conscientiousness": 0.33749712349985944,
+    "extraversion": 0.26050102015158694,
+    "agreeableness": 0.5591437661312307,
+    "neuroticism": 0.22587761038856274
+  },
+  "demographics": {
+    "age": 21,
+    "gender": "female",
+    "income": 258068.09330381732,
+    "place_of_birth_avg_income": 249590.2509876235,
+    "place_of_birth_food_variety_index": 0.44585689691910163
+  }
+}

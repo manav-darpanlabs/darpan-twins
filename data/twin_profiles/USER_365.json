@@ -1,0 +1,18 @@
+{
+  "user_id": "USER_365",
+  "name": "User 365",
+  "OCEAN": {
+    "openness": 0.5354523134875149,
+    "conscientiousness": 0.10268332297351224,
+    "extraversion": 0.30125107664661877,
+    "agreeableness": 0.4133156747432206,
+    "neuroticism": 0.5495562369754721
+  },
+  "demographics": {
+    "age": 26,
+    "gender": "female",
+    "income": 353517.5056668389,
+    "place_of_birth_avg_income": 169046.09707465075,
+    "place_of_birth_food_variety_index": 0.3694780905921617
+  }
+}

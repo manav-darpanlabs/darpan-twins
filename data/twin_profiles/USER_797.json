@@ -1,0 +1,18 @@
+{
+  "user_id": "USER_797",
+  "name": "User 797",
+  "OCEAN": {
+    "openness": 0.502356674505081,
+    "conscientiousness": 0.6631372826347534,
+    "extraversion": 0.8199165930432791,
+    "agreeableness": 0.1011554955679258,
+    "neuroticism": 0.40037362769343143
+  },
+  "demographics": {
+    "age": 33,
+    "gender": "male",
+    "income": 629628.5184268174,
+    "place_of_birth_avg_income": 73091.61101546073,
+    "place_of_birth_food_variety_index": 0.9940247976990584
+  }
+}
