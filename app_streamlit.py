@@ -1,5 +1,7 @@
 import os
 import re
+import json
+import random
 from typing import Dict, Any, List
 
 import streamlit as st
@@ -238,15 +240,12 @@ st.markdown(
       opacity: 0.6;
     }
 
-    /* NUCLEAR OPTION: Hide ALL widget labels completely */
+    /* Properly style widget labels instead of hiding them */
     label[data-testid="stWidgetLabel"] {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      width: 0 !important;
-      height: 0 !important;
-      position: absolute !important;
-      left: -9999px !important;
+      font-weight: 500;
+      font-size: var(--text-sm);
+      color: var(--text);
+      margin-bottom: var(--space-2);
     }
 
     /* File Uploader */
@@ -274,25 +273,10 @@ st.markdown(
       font-size: var(--text-base);
       padding: var(--space-4);
     }
-    /* NUCLEAR: Remove ALL labels from expanders */
-    .stExpander label,
-    .stExpander > label,
-    [data-testid="stExpander"] label,
-    [data-testid="stExpander"] label[data-testid="stWidgetLabel"] {
-      display: none !important;
-      visibility: hidden !important;
-      position: absolute !important;
-      left: -9999px !important;
-      width: 0 !important;
-      height: 0 !important;
-    }
-
-    /* Expander wrapper to contain and clean up rendering */
-    .expander-wrapper {
-      position: relative;
-    }
-    .expander-wrapper label {
-      display: none !important;
+    /* Style expander labels properly */
+    .stExpander summary > span {
+      font-weight: 600;
+      font-size: var(--text-base);
     }
 
     /* Weather Card */
@@ -303,7 +287,7 @@ st.markdown(
       padding: var(--space-6);
       margin: var(--space-4) 0 var(--space-6) 0;
       box-shadow: var(--glowB);
-      overflow: visible;
+      overflow: hidden;
     }
     .weather-title {
       font-size: var(--text-sm);
@@ -317,12 +301,17 @@ st.markdown(
       display: flex;
       align-items: center;
       gap: var(--space-4);
-      overflow: visible;
+      overflow: hidden;
+      flex-wrap: nowrap;
     }
     .weather-icon {
       font-size: 48px;
       line-height: 1.2;
       flex-shrink: 0;
+    }
+    .weather-info {
+      flex: 1;
+      min-width: 0;
     }
     .weather-city {
       font-size: var(--text-xl);
@@ -330,7 +319,9 @@ st.markdown(
       color: var(--text);
       margin-bottom: var(--space-1);
       line-height: 1.4;
-      overflow: visible;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .weather-temp {
       font-size: var(--text-base);
@@ -392,9 +383,17 @@ st.markdown(
       color: var(--muted);
     }
 
-    /* Slider */
-    .stSlider>div>div>div>div {
-      background: var(--brand2) !important;
+    /* Slider - Theme-appropriate colors */
+    .stSlider > div > div > div > div {
+      background: linear-gradient(90deg, #4CAF50, #2196F3) !important;
+    }
+    .stSlider > div > div > div {
+      background: hsl(0, 0%, 15%) !important;
+    }
+    .stSlider label {
+      color: var(--text) !important;
+      font-size: var(--text-sm) !important;
+      font-weight: 500 !important;
     }
 
     /* Hide debug text */
@@ -497,9 +496,23 @@ st.markdown(
     }
 
     .loading-subtitle {
-      font-size: var(--text-base);
-      color: var(--muted);
+      font-size: var(--text-lg);
+      color: var(--brand2);
       margin-top: var(--space-3);
+      font-weight: 600;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .loading-percentage {
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: var(--space-2);
     }
 
     .loading-twin-info {
@@ -510,35 +523,6 @@ st.markdown(
       color: var(--muted);
     }
     </style>
-    <script>
-    // Force remove all widget labels from DOM
-    function removeWidgetLabels() {
-      const labels = document.querySelectorAll('label[data-testid="stWidgetLabel"]');
-      labels.forEach(label => {
-        if (label && label.parentNode) {
-          label.parentNode.removeChild(label);
-        }
-      });
-
-      // Also remove any labels inside expanders
-      const expanderLabels = document.querySelectorAll('[data-testid="stExpander"] label');
-      expanderLabels.forEach(label => {
-        if (label && label.parentNode) {
-          label.parentNode.removeChild(label);
-        }
-      });
-    }
-
-    // Run on load
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', removeWidgetLabels);
-    } else {
-      removeWidgetLabels();
-    }
-
-    // Run periodically to catch dynamically added elements
-    setInterval(removeWidgetLabels, 100);
-    </script>
     """,
     unsafe_allow_html=True,
 )
@@ -548,7 +532,7 @@ def parse_card_form(prefix: str) -> Dict[str, Any]:
     cuisines = ["italian", "mexican", "sushi", "indian", "american", "chinese", "thai", "pizza", "burgers"]
     with st.expander(f"{prefix} card details"):
         name = st.text_input(f"{prefix} name", value=f"{prefix} Restaurant")
-        cuisine = st.selectbox(f"{prefix} cuisine", cuisines, index=0, key=f"{prefix}_cuisine")
+        cuisine = st.selectbox(f"{prefix} cuisine", cuisines, index=0, key=f"{prefix}_cuisine", label_visibility="collapsed")
         dish_price = st.number_input(
             f"{prefix} dish price (₹)",
             min_value=50.0,
@@ -700,7 +684,7 @@ def context_controls() -> Dict[str, Any]:
             f"{r.get('name')}, {r.get('country_code','')} ({r.get('latitude'):.2f},{r.get('longitude'):.2f})"
             for r in results
         ]
-        idx = st.selectbox("Results", list(range(len(labels))), format_func=lambda i: labels[i])
+        idx = st.selectbox("Results", list(range(len(labels))), format_func=lambda i: labels[i], label_visibility="collapsed")
         choice = results[idx]
 
     fetched_temp = None
@@ -778,23 +762,15 @@ def reset_experiment() -> None:
 def main() -> None:
     # Header Section - Redesigned to prevent overlaps
     st.markdown('<div class="header-container">', unsafe_allow_html=True)
-    colH1, colH2 = st.columns([3,1])
-    with colH1:
-        st.markdown(
-            '''
-            <div class="logo">
-                Darpan <span class="logo-grad">Twins</span> Lab
-            </div>
-            <div class="tagline">AI-Powered Digital Twin Experiments</div>
-            ''',
-            unsafe_allow_html=True
-        )
-    with colH2:
-        xp = st.session_state.get("xp", 0)
-        st.markdown(
-            f'<div class="xp">XP: {xp} <span class="mini">• Complete runs to unlock badges</span></div>',
-            unsafe_allow_html=True
-        )
+    st.markdown(
+        '''
+        <div class="logo">
+            Darpan <span class="logo-grad">Twins</span> Lab
+        </div>
+        <div class="tagline">AI-Powered Digital Twin Experiments</div>
+        ''',
+        unsafe_allow_html=True
+    )
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.divider()
@@ -830,7 +806,7 @@ def main() -> None:
     step = st.session_state.step
     st.markdown('<div class="stepper">'
                 f'<span class="step-pill {"active" if step==0 else ""}">Welcome</span>'
-                f'<span class="step-pill {"active" if step==1 else ""}">1. City & Upload</span>'
+                f'<span class="step-pill {"active" if step==1 else ""}">1. Setup</span>'
                 f'<span class="step-pill {"active" if step==2 else ""}">2. Running</span>'
                 f'<span class="step-pill {"active" if step==3 else ""}">3. Results</span>'
                 '</div>', unsafe_allow_html=True)
@@ -864,8 +840,9 @@ def main() -> None:
         st.write("""
 1. **Select Location:** Choose a city, weather data is fetched automatically
 2. **Upload Cards:** Upload images of two restaurant options (PNG/JPG)
-3. **Run Simulation:** 10 digital twins analyze and choose between options
-4. **View Results:** See aggregate choices, top factors, and detailed reasoning
+3. **Select Twins:** Choose from all 1,000+ twins or filter by demographics/personality
+4. **Run Simulation:** Your selected digital twins analyze and choose between options
+5. **View Results:** See aggregate choices, top factors, and detailed reasoning
         """)
 
         st.divider()
@@ -941,7 +918,7 @@ def main() -> None:
                     <div class="weather-content">
                         <div class="weather-icon">{temp_icon(wx['temperature_c'])}</div>
                         <div class="weather-icon">{rain_icon(wx['precip_mm'])}</div>
-                        <div>
+                        <div class="weather-info">
                             <div class="weather-city">{city['name']}</div>
                             <div class="weather-temp">{wx['temperature_c']:.0f}°C • {wx['precip_mm']:.1f}mm rain</div>
                         </div>
@@ -986,8 +963,8 @@ def main() -> None:
             with preview_cols[0]:
                 if file_a:
                     st.markdown('<div class="section-subheader">Card A Preview</div>', unsafe_allow_html=True)
-                    # Display image
-                    st.image(file_a, use_container_width=True)
+                    # Display image with constrained size
+                    st.image(file_a, width=350)
 
                     # Extract data if not already done
                     if "cards_a_preview" not in st.session_state:
@@ -1022,15 +999,16 @@ def main() -> None:
 
                         st.markdown("</div>", unsafe_allow_html=True)
 
-                        # Expandable JSON view
-                        with st.expander("View Full JSON Data"):
+                        # Show JSON data with checkbox toggle
+                        st.markdown("")
+                        if st.checkbox("📋 Show Full JSON Data", key="show_json_a", value=False):
                             st.json(card_a_data)
 
             with preview_cols[1]:
                 if file_b:
                     st.markdown('<div class="section-subheader">Card B Preview</div>', unsafe_allow_html=True)
-                    # Display image
-                    st.image(file_b, use_container_width=True)
+                    # Display image with constrained size
+                    st.image(file_b, width=350)
 
                     # Extract data if not already done
                     if "cards_b_preview" not in st.session_state:
@@ -1065,15 +1043,386 @@ def main() -> None:
 
                         st.markdown("</div>", unsafe_allow_html=True)
 
-                        # Expandable JSON view
-                        with st.expander("View Full JSON Data"):
+                        # Show JSON data with checkbox toggle
+                        st.markdown("")
+                        if st.checkbox("📋 Show Full JSON Data", key="show_json_b", value=False):
                             st.json(card_b_data)
+
+        # Twin Selection Section
+        st.divider()
+        st.markdown('<div class="section-header">👥 STEP 3: Twin Selection</div>', unsafe_allow_html=True)
+
+        # Load all profile metadata if not already loaded
+        if "all_profiles_data" not in st.session_state:
+            profiles_dir = os.path.join("data", "twin_profiles")
+            all_profiles_data = []
+            try:
+                files = sorted([f for f in os.listdir(profiles_dir) if f.endswith(".json")])
+                for file in files[:]:  # Load all profiles
+                    try:
+                        with open(os.path.join(profiles_dir, file), 'r') as f:
+                            profile_data = json.load(f)
+                            profile_data['file_path'] = os.path.join(profiles_dir, file)
+                            all_profiles_data.append(profile_data)
+                    except:
+                        continue
+                st.session_state["all_profiles_data"] = all_profiles_data
+            except:
+                st.error("Could not load twin profiles")
+                st.session_state["all_profiles_data"] = []
+
+        all_profiles_data = st.session_state.get("all_profiles_data", [])
+
+        # Display available twins count
+        st.info(f"📊 **{len(all_profiles_data)} Digital Twins Available** - Each with unique OCEAN personality traits and demographics")
+
+        # Twin selection method
+        selection_method = st.radio(
+            "Selection Method",
+            ["Use All Twins (Full Dataset)", "Select Random Sample", "Apply Filters"],
+            index=0,
+            horizontal=True
+        )
+
+        selected_profiles = all_profiles_data.copy()
+
+        if selection_method == "Select Random Sample":
+            col1, col2, col3 = st.columns([1.5, 1.5, 1])
+
+            # Quick select buttons
+            with col1:
+                st.markdown("**Quick Select:**")
+                button_cols = st.columns(4)
+                preset_values = [50, 100, 200, 500]
+                for idx, val in enumerate(preset_values):
+                    with button_cols[idx]:
+                        if st.button(str(val), key=f"preset_{val}", use_container_width=True):
+                            st.session_state["sample_size_input"] = val
+
+            # Custom number input
+            with col2:
+                st.markdown("**Custom Count:**")
+                sample_size = st.number_input(
+                    "Number of twins",
+                    min_value=1,
+                    max_value=min(len(all_profiles_data), 1000),
+                    value=st.session_state.get("sample_size_input", 50),
+                    step=1,
+                    key="sample_size_input",
+                    label_visibility="collapsed",
+                    help="Note: More twins = longer processing time (~3-6 seconds per twin)"
+                )
+
+            with col3:
+                st.markdown("**Randomize:**")
+                if st.button("🎲 Shuffle", use_container_width=True):
+                    st.session_state["random_seed"] = random.randint(0, 10000)
+
+            # Apply random sampling
+            random.seed(st.session_state.get("random_seed", 42))
+            selected_profiles = random.sample(all_profiles_data, min(sample_size, len(all_profiles_data)))
+
+        elif selection_method == "Apply Filters":
+            # Quick preset segments
+            st.markdown("**🚀 Quick Presets**")
+            preset_segments = {
+                "All Twins": None,
+                "Young Adults (18-30)": {"age": (18, 30)},
+                "Middle Aged (31-50)": {"age": (31, 50)},
+                "High Income (>₹500k)": {"income": (500000, float('inf'))},
+                "Adventure Seekers": {"openness": "High"},
+                "Quality Focused": {"conscientiousness": "High"},
+                "Social Butterflies": {"extraversion": "High"},
+                "Budget Conscious": {"income": (0, 300000)},
+            }
+
+            preset = st.selectbox(
+                "Select a preset filter",
+                options=list(preset_segments.keys()),
+                index=0,
+                help="Quick filters for common segments",
+                label_visibility="collapsed"
+            )
+
+            # Advanced filters with checkbox toggle
+            show_filters = st.checkbox("🎯 Show Advanced Filters", value=(preset == "All Twins"), key="show_advanced_filters")
+
+            if show_filters:
+                # Add tabs for better organization
+                tab1, tab2, tab3 = st.tabs(["Demographics", "Personality", "Behavioral"])
+
+                with tab1:
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        # Age filter - use groups instead of slider
+                        st.markdown("**Age Groups**")
+                        age_groups = ["18-25", "26-35", "36-45", "46-55", "56+"]
+                        selected_age_groups = st.multiselect(
+                            "Age Groups",
+                            options=age_groups,
+                            default=age_groups,
+                            help="Select one or more age groups",
+                            label_visibility="collapsed"
+                        )
+
+                        # Convert age groups to ranges
+                        age_range = (18, 100)
+                        if selected_age_groups and len(selected_age_groups) < len(age_groups):
+                            min_ages = []
+                            max_ages = []
+                            for group in selected_age_groups:
+                                if group == "18-25":
+                                    min_ages.append(18)
+                                    max_ages.append(25)
+                                elif group == "26-35":
+                                    min_ages.append(26)
+                                    max_ages.append(35)
+                                elif group == "36-45":
+                                    min_ages.append(36)
+                                    max_ages.append(45)
+                                elif group == "46-55":
+                                    min_ages.append(46)
+                                    max_ages.append(55)
+                                elif group == "56+":
+                                    min_ages.append(56)
+                                    max_ages.append(100)
+                            age_range = (min(min_ages), max(max_ages))
+
+                        # Gender filter
+                        st.markdown("**Gender**")
+                        gender_options = list(set([p['demographics']['gender'] for p in all_profiles_data]))
+                        selected_genders = st.multiselect(
+                            "Gender",
+                            options=gender_options,
+                            default=gender_options,
+                            label_visibility="collapsed"
+                        )
+
+                    with col2:
+                        # Income filter - use brackets instead of slider
+                        st.markdown("**Income Brackets**")
+                        income_brackets = ["<₹2L", "₹2-5L", "₹5-8L", "₹8-12L", "₹12L+"]
+                        selected_income_brackets = st.multiselect(
+                            "Income Brackets",
+                            options=income_brackets,
+                            default=income_brackets,
+                            help="Select one or more income brackets",
+                            label_visibility="collapsed"
+                        )
+
+                        # Convert income brackets to range
+                        income_range = (0, float('inf'))
+                        if selected_income_brackets and len(selected_income_brackets) < len(income_brackets):
+                            min_incomes = []
+                            max_incomes = []
+                            for bracket in selected_income_brackets:
+                                if bracket == "<₹2L":
+                                    min_incomes.append(0)
+                                    max_incomes.append(200000)
+                                elif bracket == "₹2-5L":
+                                    min_incomes.append(200000)
+                                    max_incomes.append(500000)
+                                elif bracket == "₹5-8L":
+                                    min_incomes.append(500000)
+                                    max_incomes.append(800000)
+                                elif bracket == "₹8-12L":
+                                    min_incomes.append(800000)
+                                    max_incomes.append(1200000)
+                                elif bracket == "₹12L+":
+                                    min_incomes.append(1200000)
+                                    max_incomes.append(float('inf'))
+                            income_range = (min(min_incomes), max(max_incomes))
+
+                with tab2:
+                    # OCEAN trait filters - use select boxes instead of sliders
+                    ocean_filters = {}
+                    trait_levels = ["Any", "Low (0-0.4)", "Medium (0.4-0.7)", "High (0.7-1.0)"]
+
+                    col1, col2 = st.columns(2)
+                    traits_col1 = ['openness', 'conscientiousness', 'extraversion']
+                    traits_col2 = ['agreeableness', 'neuroticism']
+
+                    with col1:
+                        for trait in traits_col1:
+                            level = st.selectbox(
+                                trait.capitalize(),
+                                options=trait_levels,
+                                index=0,
+                                key=f"ocean_{trait}",
+                                label_visibility="collapsed"
+                            )
+
+                            if level == "Low (0-0.4)":
+                                ocean_filters[trait] = (0.0, 0.4)
+                            elif level == "Medium (0.4-0.7)":
+                                ocean_filters[trait] = (0.4, 0.7)
+                            elif level == "High (0.7-1.0)":
+                                ocean_filters[trait] = (0.7, 1.0)
+                            else:  # Any
+                                ocean_filters[trait] = (0.0, 1.0)
+
+                    with col2:
+                        for trait in traits_col2:
+                            level = st.selectbox(
+                                trait.capitalize(),
+                                options=trait_levels,
+                                index=0,
+                                key=f"ocean_{trait}",
+                                label_visibility="collapsed"
+                            )
+
+                            if level == "Low (0-0.4)":
+                                ocean_filters[trait] = (0.0, 0.4)
+                            elif level == "Medium (0.4-0.7)":
+                                ocean_filters[trait] = (0.4, 0.7)
+                            elif level == "High (0.7-1.0)":
+                                ocean_filters[trait] = (0.7, 1.0)
+                            else:  # Any
+                                ocean_filters[trait] = (0.0, 1.0)
+
+                with tab3:
+                    st.markdown("**Behavioral Filters**")
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        # Birth place average income
+                        birth_income_brackets = ["Low (<₹3L)", "Medium (₹3-5L)", "High (>₹5L)", "Any"]
+                        selected_birth_income = st.selectbox(
+                            "Birth Place Economic Status",
+                            options=birth_income_brackets,
+                            index=3,
+                            help="Economic status of the place where the twin was born",
+                            label_visibility="collapsed"
+                        )
+
+                        birth_income_range = (0, float('inf'))
+                        if selected_birth_income == "Low (<₹3L)":
+                            birth_income_range = (0, 300000)
+                        elif selected_birth_income == "Medium (₹3-5L)":
+                            birth_income_range = (300000, 500000)
+                        elif selected_birth_income == "High (>₹5L)":
+                            birth_income_range = (500000, float('inf'))
+
+                    with col2:
+                        # Food variety index
+                        variety_levels = ["Low (0-0.3)", "Medium (0.3-0.6)", "High (0.6-1.0)", "Any"]
+                        selected_variety = st.selectbox(
+                            "Food Variety Preference",
+                            options=variety_levels,
+                            index=3,
+                            help="Preference for food variety in the birth location",
+                            label_visibility="collapsed"
+                        )
+
+                        variety_range = (0.0, 1.0)
+                        if selected_variety == "Low (0-0.3)":
+                            variety_range = (0.0, 0.3)
+                        elif selected_variety == "Medium (0.3-0.6)":
+                            variety_range = (0.3, 0.6)
+                        elif selected_variety == "High (0.6-1.0)":
+                            variety_range = (0.6, 1.0)
+
+            # Apply preset if selected
+            if preset != "All Twins" and preset_segments[preset]:
+                preset_config = preset_segments[preset]
+                if "age" in preset_config:
+                    age_range = preset_config["age"]
+                if "income" in preset_config:
+                    income_range = preset_config["income"]
+                if "openness" in preset_config:
+                    if preset_config["openness"] == "High":
+                        ocean_filters["openness"] = (0.7, 1.0)
+                if "conscientiousness" in preset_config:
+                    if preset_config["conscientiousness"] == "High":
+                        ocean_filters["conscientiousness"] = (0.7, 1.0)
+                if "extraversion" in preset_config:
+                    if preset_config["extraversion"] == "High":
+                        ocean_filters["extraversion"] = (0.7, 1.0)
+
+            # Apply filters
+            filtered_profiles = []
+            for profile in all_profiles_data:
+                # Check demographics
+                if not (age_range[0] <= profile['demographics']['age'] <= age_range[1]):
+                    continue
+                if profile['demographics']['gender'] not in selected_genders:
+                    continue
+                if not (income_range[0] <= profile['demographics']['income'] <= income_range[1]):
+                    continue
+
+                # Check behavioral filters
+                if 'birth_income_range' in locals():
+                    birth_income = profile['demographics'].get('place_of_birth_avg_income', 0)
+                    if not (birth_income_range[0] <= birth_income <= birth_income_range[1]):
+                        continue
+
+                if 'variety_range' in locals():
+                    variety = profile['demographics'].get('place_of_birth_food_variety_index', 0)
+                    if not (variety_range[0] <= variety <= variety_range[1]):
+                        continue
+
+                # Check OCEAN traits
+                valid = True
+                for trait, (min_val, max_val) in ocean_filters.items():
+                    if not (min_val <= profile['OCEAN'][trait] <= max_val):
+                        valid = False
+                        break
+
+                if valid:
+                    filtered_profiles.append(profile)
+
+            selected_profiles = filtered_profiles
+
+            # Sample size for filtered results
+            if len(selected_profiles) > 100:
+                max_filtered = st.number_input(
+                    f"Limit to (filtered {len(selected_profiles)} twins)",
+                    min_value=1,
+                    max_value=min(len(selected_profiles), 1000),
+                    value=min(100, len(selected_profiles)),
+                    step=1
+                )
+                random.seed(42)
+                selected_profiles = random.sample(selected_profiles, min(max_filtered, len(selected_profiles)))
+
+        # Display selection summary
+        if selected_profiles:
+            st.success(f"✅ **{len(selected_profiles)} twins selected** for the experiment")
+
+            # Show preview with checkbox toggle
+            st.markdown("")
+            if st.checkbox(f"👥 Show Preview of Selected Twins ({len(selected_profiles)})", value=False, key="show_twin_preview"):
+                st.markdown("---")
+                st.markdown("**First 10 twins in the selection:**")
+                preview_data = []
+                for p in selected_profiles[:10]:  # Show first 10
+                    preview_data.append({
+                        "ID": p['user_id'],
+                        "Age": p['demographics']['age'],
+                        "Gender": p['demographics']['gender'],
+                        "O": f"{p['OCEAN']['openness']:.1f}",
+                        "C": f"{p['OCEAN']['conscientiousness']:.1f}",
+                        "E": f"{p['OCEAN']['extraversion']:.1f}",
+                        "A": f"{p['OCEAN']['agreeableness']:.1f}",
+                        "N": f"{p['OCEAN']['neuroticism']:.1f}",
+                    })
+                st.dataframe(preview_data, hide_index=True)
+                if len(selected_profiles) > 10:
+                    st.info(f"... and {len(selected_profiles) - 10} more twins")
+                st.markdown("---")
+        else:
+            st.warning("No twins match the selected criteria. Please adjust filters.")
+
+        # Performance warning
+        if len(selected_profiles) > 50:
+            est_time = len(selected_profiles) * 4  # ~4 seconds per twin
+            st.warning(f"⏱️ **Performance Note**: Processing {len(selected_profiles)} twins will take approximately {est_time//60} minutes {est_time%60} seconds")
 
         # Start button with better styling
         st.markdown("")
         st.markdown("")
-        ready = bool(file_a and file_b and st.session_state.get("last_wx") and st.session_state.get("last_city"))
-        if st.button("▶️ Start Experiment", disabled=not ready, use_container_width=True):
+        ready = bool(file_a and file_b and st.session_state.get("last_wx") and st.session_state.get("last_city") and selected_profiles)
+        if st.button("▶️ Start Experiment", disabled=not ready, use_container_width=True, type="primary"):
             # Use already extracted data from preview
             card_a = st.session_state.get("cards_a_preview", {})
             card_b = st.session_state.get("cards_b_preview", {})
@@ -1095,55 +1444,144 @@ def main() -> None:
                 "temperature_c": float(wx.get("temperature_c", 24.0)),
                 "precip_mm": float(wx.get("precip_mm", 0.0)),
             }
+
+            # Use selected profiles instead of hardcoded 10
+            profile_paths = [p['file_path'] for p in selected_profiles]
             st.session_state["run_params"] = {
-                "profiles": [os.path.join(profiles_dir, f) for f in (files[:10] if len(files) >= 10 else files)],
+                "profiles": profile_paths,
                 "k": 50,
                 "n_samples": 3,
                 "temperature": 0.3,
             }
+            st.session_state["selected_twin_count"] = len(selected_profiles)
             st.session_state["pending_run"] = True
             st.session_state.step = 2
             st.rerun()
 
-    # Page 2: Loading & run with Full-Screen Blur Overlay
+    # Page 2: Loading & run - Using Native Streamlit Components
     elif step == 2:
-        # Display the blur overlay with loading animation
-        progress_pct = st.session_state.get("progress_pct", 0)
-        current_twin = st.session_state.get("current_twin", "Initializing...")
-
-        st.markdown(f"""
-        <div class="blur-overlay">
-            <div class="loading-card">
-                <div class="loading-icon">🤖</div>
-                <div class="loading-title">Experiment Running</div>
-                <div class="loading-status">Processing Digital Twins</div>
-
-                <div class="loading-progress-container">
-                    <div class="loading-progress-bar" style="width: {progress_pct}%"></div>
-                </div>
-
-                <div class="loading-percentage">{progress_pct}%</div>
-                <div class="loading-subtitle">Analyzing restaurant choices...</div>
-
-                <div class="loading-twin-info">
-                    <div>Current Twin: {current_twin}</div>
-                    <div style="margin-top: var(--space-2); color: var(--brand2);">
-                        10 digital twins are making decisions based on their unique personalities
-                    </div>
-                </div>
-            </div>
-        </div>
+        # Create an anchor at the top for auto-scroll
+        st.markdown('<a id="top"></a>', unsafe_allow_html=True)
+        # JavaScript to scroll to top on page load
+        st.markdown("""
+        <script>
+        window.onload = function() {
+            window.scrollTo({top: 0, behavior: 'instant'});
+            document.getElementById('top').scrollIntoView();
+        }
+        </script>
         """, unsafe_allow_html=True)
 
-        # Also keep a progress bar for functionality
-        prog = st.progress(0, text="")
-        def on_progress(done: int, total: int) -> None:
-            pct = int(round(100 * done / max(1, total)))
+        # Validate twin count is properly set
+        total_twins = st.session_state.get("selected_twin_count")
+        if not total_twins:
+            st.error("Error: Twin count not set properly. Please go back and select twins again.")
+            if st.button("Go Back"):
+                st.session_state.step = 1
+                st.rerun()
+
+        # Initialize progress tracking
+        progress_pct = st.session_state.get("progress_pct", 0)
+        current_twin_num = st.session_state.get("current_twin_num", 0)
+        current_stage = st.session_state.get("current_stage", "Initializing...")
+
+        # Create container for loading display
+        with st.container():
+            st.markdown("## 🤖 Experiment Running")
+            st.markdown(f"### Processing {total_twins} Digital Twins")
+
+            # Add stop button
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                if st.button("⏹️ Stop Experiment", key="stop_button", use_container_width=True):
+                    st.session_state["stop_requested"] = True
+                    st.warning("Stopping experiment... Please wait for current twin to complete.")
+
+            st.markdown("---")
+
+            # Progress bar
+            progress_bar = st.progress(progress_pct / 100.0, text=f"Overall Progress: {progress_pct}%")
+
+            # Twin counter and stage info
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Current Twin", f"{current_twin_num} of {total_twins}", delta=None)
+            with col2:
+                time_estimate = (total_twins - current_twin_num) * 4  # ~4 seconds per twin
+                st.metric("Estimated Time Remaining", f"{time_estimate // 60}m {time_estimate % 60}s", delta=None)
+
+            # Current stage display
+            stage_container = st.empty()
+            stage_container.info(f"**Current Stage:** {current_stage}")
+
+            # Show processing details directly (no expander)
+            st.markdown("")
+            st.markdown("---")
+            st.markdown("**📊 Processing Details:**")
+            col_details1, col_details2, col_details3 = st.columns(3)
+            with col_details1:
+                st.markdown(f"**Total Twins:** {total_twins}")
+                st.markdown(f"**Current Twin:** {current_twin_num}")
+            with col_details2:
+                st.markdown(f"**Progress:** {progress_pct}%")
+                st.markdown(f"**Stage:** {current_stage}")
+            with col_details3:
+                st.markdown(f"**Speed:** ~3-6s per twin")
+                est_remaining = (total_twins - current_twin_num) * 4
+                st.markdown(f"**Est. Time:** {est_remaining//60}m {est_remaining%60}s")
+
+            # Store containers in session state for updates
+            st.session_state["progress_bar"] = progress_bar
+            st.session_state["stage_container"] = stage_container
+
+        # Progress callback function
+        def on_progress(done: int, total: int, stage: str = "", twin_num: int = 0) -> None:
+            # Check if stop was requested
+            if st.session_state.get("stop_requested", False):
+                st.stop()  # Stop execution
+
+            # Calculate progress based on twins completed, not API calls
+            # Each twin has ~9 API calls, so we calculate based on twin_num instead
+            total_twins_count = st.session_state.get("selected_twin_count", 1)
+
+            # Calculate percentage based on twins completed
+            # If twin_num is 0, use the API call progress but scale it down
+            if twin_num > 0:
+                # Use twin progress (twin_num - 1 because it's 1-indexed)
+                twins_completed = twin_num - 1
+                # Add partial progress for current twin (done/total gives progress within current twin)
+                within_twin_progress = (done % 9) / 9.0 if total > 0 else 0
+                pct = int(round(100 * (twins_completed + within_twin_progress) / max(1, total_twins_count)))
+            else:
+                # Fallback to original calculation but scaled
+                pct = int(round(100 * done / max(1, total)))
+
             st.session_state["progress_pct"] = pct
-            # Update current twin info
-            if done > 0:
-                st.session_state["current_twin"] = f"USER_{done:03d}"
-            prog.progress(min(pct, 100), text="")
+            st.session_state["current_twin_num"] = twin_num
+            st.session_state["current_stage"] = stage
+
+            # Parse stage to get cleaner display
+            stage_display = stage
+            if "Analyzing Card A" in stage:
+                stage_display = "🔍 Analyzing Card A..."
+            elif "Analyzing Card B" in stage:
+                stage_display = "🔍 Analyzing Card B..."
+            elif "Comparing options" in stage:
+                stage_display = "⚖️ Making decision..."
+            elif "Finalizing" in stage:
+                stage_display = "📊 Finalizing decision..."
+            elif stage == "":
+                stage_display = "🤖 Processing..."
+
+            # Update native components if they exist
+            if "progress_bar" in st.session_state:
+                st.session_state["progress_bar"].progress(pct / 100.0, text=f"Overall Progress: {pct}%")
+            if "stage_container" in st.session_state:
+                st.session_state["stage_container"].info(f"**Current Stage:** {stage_display}")
+
+            # Force a rerun to update the display
+            # Note: This is commented out to prevent infinite loops
+            # st.rerun()
         if st.session_state.get("pending_run"):
             params = st.session_state.get("run_params", {})
             dual_results = run_dual_llm_for_users(
@@ -1178,23 +1616,21 @@ def main() -> None:
         b_pct = pct['B']
         t_pct = pct['tie']
 
-        st.markdown('<div class="panel ghost">', unsafe_allow_html=True)
-
         # Summary stats
         st.markdown(f"**Experiment Summary**: {total} digital twins simulated")
         st.markdown("")
 
         # Aggregate results with fixed spacing
         st.markdown("**Aggregate Results**")
-        st.markdown(f"<b>Card A:</b> {counts['A']} twins ({a_pct:.1f}%)", unsafe_allow_html=True)
+        st.markdown(f"**Card A:** {counts['A']} twins ({a_pct:.1f}%)")
         st.markdown(f'<div class="scorebar"><div style="width:{a_pct:.1f}%"></div></div>', unsafe_allow_html=True)
         st.markdown("")
 
-        st.markdown(f"<b>Card B:</b> {counts['B']} twins ({b_pct:.1f}%)", unsafe_allow_html=True)
+        st.markdown(f"**Card B:** {counts['B']} twins ({b_pct:.1f}%)")
         st.markdown(f'<div class="scorebar"><div style="width:{b_pct:.1f}%"></div></div>', unsafe_allow_html=True)
         st.markdown("")
 
-        st.markdown(f"<b>Tie:</b> {counts['tie']} twins ({t_pct:.1f}%)", unsafe_allow_html=True)
+        st.markdown(f"**Tie:** {counts['tie']} twins ({t_pct:.1f}%)")
         st.markdown(f'<div class="scorebar"><div style="width:{t_pct:.1f}%"></div></div>', unsafe_allow_html=True)
         st.markdown("")
         st.markdown("")
@@ -1238,8 +1674,10 @@ def main() -> None:
             reset_experiment()
             st.rerun()
 
-        # Detailed per-twin data
-        with st.expander("Detailed Per-Twin Data"):
+        # Detailed per-twin data with checkbox toggle
+        if st.checkbox("📋 Show Detailed Per-Twin Data", value=False, key="show_detailed_data"):
+            st.markdown("---")
+            st.markdown("**Detailed Decision Data for Each Twin:**")
             st.dataframe([
                 {
                     "user_id": r.get("user_id"),
@@ -1255,7 +1693,6 @@ def main() -> None:
                     "response_B": r.get("response_B"),
                 } for r in dual_results
             ])
-        st.markdown('</div>', unsafe_allow_html=True)
 
 
 if __name__ == "__main__":

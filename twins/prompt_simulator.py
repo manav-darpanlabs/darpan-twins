@@ -391,7 +391,7 @@ def run_dual_llm_for_users(
     k: int = 50,
     n_samples: int = 3,
     temperature: float = 0.3,
-    progress_cb: Optional[Callable[[int, int], None]] = None,
+    progress_cb: Optional[Callable[[int, int, str, int], None]] = None,  # Added stage and twin_num params
 ) -> List[Dict[str, Any]]:
     df = pd.read_csv(choices_csv)
     client = LLMClient()
@@ -407,40 +407,42 @@ def run_dual_llm_for_users(
     total_steps = max(1, len(profile_paths) * (2 + 2 * n_samples + 1))
     steps_done = 0
 
-    def bump(delta: int = 1) -> None:
+    def bump(delta: int = 1, stage: str = "") -> None:
         nonlocal steps_done
         steps_done += delta
         if progress_cb is not None:
-            progress_cb(min(steps_done, total_steps), total_steps)
+            # Calculate current twin number (1-indexed for display)
+            current_twin = len(results) + 1
+            progress_cb(min(steps_done, total_steps), total_steps, stage, current_twin)
 
-    for path in profile_paths:
+    for idx, path in enumerate(profile_paths):
         profile = TwinProfile.from_json(path)
         history = build_user_history(profile.user_id, df, k)
         # Responder A/B
         prompt_a = build_responder_prompt(profile, history, ctx_summary, profile.user_id, a_sum)
         prompt_b = build_responder_prompt(profile, history, ctx_summary, profile.user_id, b_sum)
         resp_a = client.generate(prompt_a, temperature=0.3, max_tokens=120)
-        bump()
+        bump(stage=f"Twin {len(results) + 1}: Analyzing Card A")
         resp_b = client.generate(prompt_b, temperature=0.3, max_tokens=120)
-        bump()
+        bump(stage=f"Twin {len(results) + 1}: Analyzing Card B")
         # Judge with robustness
         profile_json = {"user_id": profile.user_id, "OCEAN": {"O": profile.openness, "C": profile.conscientiousness, "E": profile.extraversion, "A": profile.agreeableness, "N": profile.neuroticism}}
         samples_ab: List[Dict[str, Any]] = []
-        for _ in range(max(1, n_samples)):
+        for i in range(max(1, n_samples)):
             out = call_judge_samples(client, profile_json, history, scenario_json, card_a_json, card_b_json, n=1, temperature=temperature)
             if out:
                 samples_ab.extend(out)
-            bump()
+            bump(stage=f"Twin {len(results) + 1}: Comparing options (Round {i+1}/{n_samples*2})")
         samples_ba: List[Dict[str, Any]] = []
-        for _ in range(max(1, n_samples)):
+        for i in range(max(1, n_samples)):
             out = call_judge_samples(client, profile_json, history, scenario_json, card_b_json, card_a_json, n=1, temperature=temperature)
             if out:
                 samples_ba.extend(out)
-            bump()
+            bump(stage=f"Twin {len(results) + 1}: Comparing options (Round {n_samples+i+1}/{n_samples*2})")
         choice, checks, reasons = aggregate_judge_samples(samples_ab, samples_ba)
         chosen_resp = resp_a if choice == "A" else (resp_b if choice == "B" else (resp_a or resp_b))
         likert = scorer.score(chosen_resp)
-        bump()  # likert scored
+        bump(stage=f"Twin {len(results) + 1}: Finalizing decision")
         results.append(
             {
                 "user_id": profile.user_id,

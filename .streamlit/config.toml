@@ -1,0 +1,11 @@
+[client]
+# Hide the deploy button that appears in the top-right corner
+toolbarMode = "minimal"
+
+[runner]
+# Hide the "Deploy" menu
+fastReruns = false
+
+[browser]
+# Disable gathering usage stats
+gatherUsageStats = false
