@@ -4,3 +4,10 @@ node_modules/
 dist/
 
 .venv/
+
+# Large data files (use Git LFS or exclude)
+data/rag_embeddings.npy
+data/test_expanded.csv
+data/train_expanded.csv
+*.npy
+*_expanded.csv
