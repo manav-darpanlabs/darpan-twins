@@ -632,10 +632,6 @@ def main():
                 num_assessments = len(st.session_state.persona_assessments)
                 st.success(f"✅ clustering completed successfully! {num_assessments} personas assessed with llm")
 
-        # Show placeholder or results
-        if not st.session_state.current_clustering:
-            st.info("👆 click 'run clustering' above to discover customer personas dynamically")
-
         # Display results if available
         if st.session_state.current_clustering:
             clustering = st.session_state.current_clustering
@@ -745,7 +741,6 @@ def main():
                     personas = json.load(f)
 
                 st.markdown("### 📚 pre-computed personas")
-                st.info("💡 use the clustering controls above to discover new personas dynamically")
 
                 # Show pre-computed personas in grid
                 sorted_personas = sorted(personas.items(), key=lambda x: x[1]['size'], reverse=True)
