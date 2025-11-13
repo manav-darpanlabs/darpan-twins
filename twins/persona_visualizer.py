@@ -214,7 +214,7 @@ class PersonaVisualizer:
                 x=highlighted['x'],
                 y=highlighted['y'],
                 mode='markers',
-                marker=dict(size=15, color='red', symbol='star'),
+                marker=dict(size=15, color='#C1E329', symbol='star'),
                 name='Selected Twins',
                 hovertext=highlighted['user_id']
             ))

@@ -203,6 +203,30 @@ st.markdown("""
 .stAlert a {
     color: #3FB1F0 !important;
 }
+
+/* Override error/warning alert colors */
+div[data-testid="stAlert"][data-baseweb="notification"] {
+    background-color: rgba(193, 227, 41, 0.1) !important;
+    border-left-color: #C1E329 !important;
+}
+
+/* Override error messages specifically */
+div[data-testid="stException"] {
+    background-color: rgba(193, 227, 41, 0.1) !important;
+    border-left-color: #C1E329 !important;
+    color: #ffffff !important;
+}
+
+/* Override st.error color */
+.stAlert[data-baseweb="notification"] > div {
+    background-color: rgba(193, 227, 41, 0.1) !important;
+}
+
+/* Remove red from any notification icons */
+.stAlert svg {
+    color: #C1E329 !important;
+    fill: #C1E329 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
