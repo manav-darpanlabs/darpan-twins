@@ -43,6 +43,11 @@ st.markdown("""
     font-family: 'Inter', -apple-system, system-ui, sans-serif !important;
 }
 
+/* Force all text to lowercase globally */
+* {
+    text-transform: lowercase !important;
+}
+
 /* Compact persona cards grid */
 .persona-grid {
     display: grid;
@@ -467,22 +472,22 @@ def render_compact_persona_card(cluster_id, persona, is_selected):
     behavioral = persona.get('behavioral_traits', {})
     top_traits = []
     if behavioral.get('novelty_seeking', 0) > 0.6:
-        top_traits.append("Adventurous")
+        top_traits.append("adventurous")
     if behavioral.get('budget_sensitivity', 0) > 0.6:
-        top_traits.append("Budget-conscious")
+        top_traits.append("budget-conscious")
     if behavioral.get('rating_focus', 0) > 0.6:
-        top_traits.append("Quality-focused")
+        top_traits.append("quality-focused")
     if behavioral.get('distance_tolerance', 0) > 0.6:
-        top_traits.append("Distance-flexible")
+        top_traits.append("distance-flexible")
 
     if not top_traits:
-        top_traits = ["Balanced", "Contextual", "Adaptive"]
+        top_traits = ["balanced", "contextual", "adaptive"]
     top_traits = top_traits[:3]
 
     card_html = f"""
     <div class="persona-card {selected_class}">
-        <div class="persona-name">{persona.get('name', f'Persona {cluster_id}')}</div>
-        <div class="persona-tagline">{persona.get('tagline', 'Customer segment')}</div>
+        <div class="persona-name">{persona.get('name', f'persona {cluster_id}')}</div>
+        <div class="persona-tagline">{persona.get('tagline', 'customer segment')}</div>
         <div class="persona-stats">
             <span>👥 {persona.get('size', 0)}</span>
             <span>📊 {persona.get('percentage', 0):.1f}%</span>
@@ -497,49 +502,49 @@ def render_compact_persona_card(cluster_id, persona, is_selected):
 def render_clustering_controls():
     """Render dynamic clustering control panel"""
     st.markdown('<div class="clustering-panel">', unsafe_allow_html=True)
-    st.markdown("### 🔬 Dynamic Persona Discovery")
+    st.markdown("### 🔬 dynamic persona discovery")
 
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         algorithm = st.selectbox(
-            "Clustering Algorithm",
+            "clustering algorithm",
             options=["gmm", "kmeans", "hierarchical", "dbscan"],
             format_func=lambda x: {
-                "gmm": "🔮 Gaussian Mixture",
-                "kmeans": "🎯 K-Means",
-                "hierarchical": "🌳 Hierarchical",
-                "dbscan": "💫 DBSCAN"
+                "gmm": "🔮 gaussian mixture",
+                "kmeans": "🎯 k-means",
+                "hierarchical": "🌳 hierarchical",
+                "dbscan": "💫 dbscan"
             }[x],
-            help="Choose clustering algorithm"
+            help="choose clustering algorithm"
         )
         st.session_state.clustering_params["algorithm"] = algorithm
 
     with col2:
         n_clusters = st.slider(
-            "Number of Personas",
+            "number of personas",
             min_value=5,
             max_value=20,
             value=8,
-            help="Target number of personas"
+            help="target number of personas"
         )
         st.session_state.clustering_params["n_clusters"] = n_clusters
 
     with col3:
         min_size = st.slider(
-            "Min Twins per Persona",
+            "min twins per persona",
             min_value=20,
             max_value=100,
             value=50,
             step=10,
-            help="Minimum cluster size"
+            help="minimum cluster size"
         )
         st.session_state.clustering_params["min_cluster_size"] = min_size
 
     with col4:
         # Add vertical spacing to align with sliders
         st.markdown('<div style="height: 28px;"></div>', unsafe_allow_html=True)
-        if st.button("🚀 Run Clustering", type="primary", use_container_width=True):
+        if st.button("🚀 run clustering", type="primary", use_container_width=True):
             st.markdown('</div>', unsafe_allow_html=True)
             return True
 
@@ -548,7 +553,7 @@ def render_clustering_controls():
 
 def perform_clustering():
     """Perform dynamic clustering"""
-    with st.spinner("🔍 Discovering personas..."):
+    with st.spinner("🔍 discovering personas..."):
         analyzer = st.session_state.analyzer
 
         if analyzer.features_df is None:
@@ -578,32 +583,32 @@ def main():
     init_session_state()
 
     # Header
-    st.markdown("# 🎭 Darpan Twins Lab")
-    st.markdown("### AI-Powered Persona Discovery & Customer Simulation Platform")
+    st.markdown("# 🎭 darpan twins lab")
+    st.markdown("### ai-powered persona discovery & customer simulation platform")
     st.markdown("---")
 
     # Large, prominent tabs
     tab1, tab2, tab3, tab4 = st.tabs([
-        "🎭 PERSONAS",
-        "🧪 EXPERIMENT",
-        "📊 ANALYTICS",
-        "⚙️ SETTINGS"
+        "🎭 personas",
+        "🧪 experiment",
+        "📊 analytics",
+        "⚙️ settings"
     ])
 
     with tab1:  # Personas Tab
-        st.markdown("## Discover Customer Personas")
+        st.markdown("## discover customer personas")
 
         # Clustering controls
         should_cluster = render_clustering_controls()
 
         if should_cluster:
             if perform_clustering():
-                st.success("✅ Clustering completed successfully!")
+                st.success("✅ clustering completed successfully!")
                 st.balloons()
 
         # Show placeholder or results
         if not st.session_state.current_clustering:
-            st.info("👆 Click 'Run Clustering' above to discover customer personas dynamically")
+            st.info("👆 click 'run clustering' above to discover customer personas dynamically")
 
         # Display results if available
         if st.session_state.current_clustering:
@@ -612,17 +617,17 @@ def main():
             # Metrics
             col1, col2, col3, col4 = st.columns(4)
             with col1:
-                st.metric("Personas Found", clustering["metrics"]["n_clusters"])
+                st.metric("personas found", clustering["metrics"]["n_clusters"])
             with col2:
-                st.metric("Coverage", f"{clustering['metrics']['coverage']:.1f}%")
+                st.metric("coverage", f"{clustering['metrics']['coverage']:.1f}%")
             with col3:
-                st.metric("Silhouette Score", f"{clustering['metrics']['silhouette']:.3f}")
+                st.metric("silhouette score", f"{clustering['metrics']['silhouette']:.3f}")
             with col4:
-                st.metric("Min Size", clustering["metrics"]["min_size"])
+                st.metric("min size", clustering["metrics"]["min_size"])
 
             st.markdown("---")
-            st.markdown("### 🎯 Discovered Personas")
-            st.info("💡 Click on personas to select them for experiments")
+            st.markdown("### 🎯 discovered personas")
+            st.info("💡 click on personas to select them for experiments")
 
             # Render persona cards in grid
             characteristics = clustering["characteristics"]
@@ -640,8 +645,8 @@ def main():
 
                         # Create mock persona dict for card
                         persona_data = {
-                            "name": f"Persona {cluster_id}",
-                            "tagline": f"Cluster with {char['size']} twins",
+                            "name": f"persona {cluster_id}",
+                            "tagline": f"cluster with {char['size']} twins",
                             "size": char["size"],
                             "percentage": char["percentage"],
                             "behavioral_traits": char["behavioral_means"]
@@ -651,7 +656,7 @@ def main():
                                   unsafe_allow_html=True)
 
                         # Hidden checkbox for selection
-                        if st.checkbox(f"Select Persona {cluster_id}",
+                        if st.checkbox(f"select persona {cluster_id}",
                                      key=f"sel_{cluster_id}",
                                      value=is_selected,
                                      label_visibility="collapsed"):
@@ -666,7 +671,7 @@ def main():
             col1, col2 = st.columns(2)
 
             with col1:
-                st.markdown("### 🎨 OCEAN Traits Comparison")
+                st.markdown("### 🎨 ocean traits comparison")
                 if st.session_state.selected_personas:
                     fig = go.Figure()
                     for cluster_id in st.session_state.selected_personas[:5]:
@@ -675,10 +680,10 @@ def main():
                             fig.add_trace(go.Scatterpolar(
                                 r=[ocean['openness'], ocean['conscientiousness'],
                                    ocean['extraversion'], ocean['agreeableness'], ocean['neuroticism']],
-                                theta=['Openness', 'Conscientiousness', 'Extraversion',
-                                      'Agreeableness', 'Neuroticism'],
+                                theta=['openness', 'conscientiousness', 'extraversion',
+                                      'agreeableness', 'neuroticism'],
                                 fill='toself',
-                                name=f'Persona {cluster_id}'
+                                name=f'persona {cluster_id}'
                             ))
 
                     fig.update_layout(
@@ -688,10 +693,10 @@ def main():
                     )
                     st.plotly_chart(fig, use_container_width=True)
                 else:
-                    st.info("👆 Select personas to compare their traits")
+                    st.info("👆 select personas to compare their traits")
 
             with col2:
-                st.markdown("### 📊 Cluster Summary")
+                st.markdown("### 📊 cluster summary")
                 st.dataframe(clustering["summary"], use_container_width=True, hide_index=True)
 
         else:
@@ -700,8 +705,8 @@ def main():
                 with open("data/persona_definitions.json", 'r') as f:
                     personas = json.load(f)
 
-                st.markdown("### 📚 Pre-computed Personas")
-                st.info("💡 Use the clustering controls above to discover new personas dynamically")
+                st.markdown("### 📚 pre-computed personas")
+                st.info("💡 use the clustering controls above to discover new personas dynamically")
 
                 # Show pre-computed personas in grid
                 sorted_personas = sorted(personas.items(), key=lambda x: x[1]['size'], reverse=True)
@@ -725,13 +730,13 @@ def main():
                                 if cluster_id in st.session_state.selected_personas:
                                     st.session_state.selected_personas.remove(cluster_id)
             except:
-                st.info("👆 Configure clustering parameters and click 'Run Clustering' to discover personas")
+                st.info("👆 configure clustering parameters and click 'run clustering' to discover personas")
 
     with tab2:  # Experiment Tab
-        st.markdown("## 🧪 Persona-Based Experiments")
+        st.markdown("## 🧪 persona-based experiments")
 
         if not st.session_state.selected_personas:
-            st.warning("⚠️ Please select personas from the Personas tab first")
+            st.warning("⚠️ please select personas from the personas tab first")
         else:
             st.success(f"✅ {len(st.session_state.selected_personas)} personas selected for experiment")
 
@@ -739,9 +744,9 @@ def main():
             col1, col2 = st.columns(2)
 
             with col1:
-                st.markdown("### 📍 Location & Context")
+                st.markdown("### 📍 location & context")
                 city_idx = st.selectbox(
-                    "Select City",
+                    "select city",
                     range(len(DEFAULT_CITIES)),
                     format_func=lambda i: DEFAULT_CITIES[i]["name"]
                 )
@@ -752,20 +757,20 @@ def main():
                     if weather and not weather.get("error"):
                         st.info(f"🌡️ {weather['temperature_c']:.0f}°C | 💧 {weather['precip_mm']:.1f}mm")
 
-                st.markdown("### 🍽️ Restaurant Card A")
-                file_a = st.file_uploader("Upload Card A", type=["png", "jpg", "jpeg"], key="card_a")
+                st.markdown("### 🍽️ restaurant card a")
+                file_a = st.file_uploader("upload card a", type=["png", "jpg", "jpeg"], key="card_a")
                 if file_a:
                     st.image(file_a, width=250)
 
             with col2:
-                st.markdown("### 🍽️ Restaurant Card B")
-                file_b = st.file_uploader("Upload Card B", type=["png", "jpg", "jpeg"], key="card_b")
+                st.markdown("### 🍽️ restaurant card b")
+                file_b = st.file_uploader("upload card b", type=["png", "jpg", "jpeg"], key="card_b")
                 if file_b:
                     st.image(file_b, width=250)
 
             if file_a and file_b:
-                if st.button("🚀 Run Persona Experiment", type="primary", use_container_width=True):
-                    with st.spinner("Running experiment on selected personas..."):
+                if st.button("🚀 run persona experiment", type="primary", use_container_width=True):
+                    with st.spinner("running experiment on selected personas..."):
                         # Get twins from selected personas
                         selected_twins = []
                         for cluster_id in st.session_state.selected_personas:
@@ -776,23 +781,23 @@ def main():
                                 pass
 
                         if selected_twins:
-                            st.success(f"✅ Running experiment on {len(selected_twins)} twins from {len(st.session_state.selected_personas)} personas")
-                            st.info("💡 Experiment functionality ready - integrate with actual LLM calls")
+                            st.success(f"✅ running experiment on {len(selected_twins)} twins from {len(st.session_state.selected_personas)} personas")
+                            st.info("💡 experiment functionality ready - integrate with actual llm calls")
                         else:
-                            st.warning("No twins found for selected personas")
+                            st.warning("no twins found for selected personas")
 
     with tab3:  # Analytics Tab
-        st.markdown("## 📊 Persona Analytics")
+        st.markdown("## 📊 persona analytics")
 
         if st.session_state.current_clustering:
             metrics = st.session_state.current_clustering["metrics"]
 
-            st.markdown("### 🎯 Clustering Quality Metrics")
+            st.markdown("### 🎯 clustering quality metrics")
 
             # Metrics visualization
             fig = go.Figure()
             fig.add_trace(go.Bar(
-                x=['Silhouette', 'Davies-Bouldin', 'Calinski-Harabasz'],
+                x=['silhouette', 'davies-bouldin', 'calinski-harabasz'],
                 y=[metrics['silhouette'],
                    1 / (1 + metrics['davies_bouldin']),
                    metrics['calinski_harabasz'] / 100],
@@ -800,39 +805,39 @@ def main():
             ))
 
             fig.update_layout(
-                title="Clustering Quality Indicators",
-                yaxis_title="Score",
+                title="clustering quality indicators",
+                yaxis_title="score",
                 showlegend=False,
                 height=400
             )
             st.plotly_chart(fig, use_container_width=True)
         else:
-            st.info("Run clustering from the Personas tab to see analytics")
+            st.info("run clustering from the personas tab to see analytics")
 
     with tab4:  # Settings Tab
-        st.markdown("## ⚙️ Configuration")
+        st.markdown("## ⚙️ configuration")
 
         col1, col2 = st.columns(2)
 
         with col1:
-            st.markdown("### 💾 Export Options")
-            if st.button("Export Personas (JSON)"):
+            st.markdown("### 💾 export options")
+            if st.button("export personas (json)"):
                 if st.session_state.current_clustering:
                     st.session_state.analyzer.save_current_clustering()
-                    st.success("✅ Exported to data/dynamic_persona_assignments.json")
+                    st.success("✅ exported to data/dynamic_persona_assignments.json")
                 else:
-                    st.warning("No clustering results to export")
+                    st.warning("no clustering results to export")
 
         with col2:
-            st.markdown("### ℹ️ About")
+            st.markdown("### ℹ️ about")
             st.markdown("""
-            **Darpan Twins Lab v3.0**
+            **darpan twins lab v3.0**
 
-            Dynamic Persona Discovery Platform
-            - Real-time clustering
-            - Multiple algorithms
-            - Minimum cluster size enforcement
-            - Persona-based experimentation
+            dynamic persona discovery platform
+            - real-time clustering
+            - multiple algorithms
+            - minimum cluster size enforcement
+            - persona-based experimentation
             """)
 
 if __name__ == "__main__":
