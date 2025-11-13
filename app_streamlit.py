@@ -56,6 +56,12 @@ st.markdown("""
     margin: 1.5rem 0;
 }
 
+/* Container for card + checkbox positioning */
+.persona-card-container {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
 .persona-card {
     background: #141414;
     border: 2px solid #2a2a2a;
@@ -372,16 +378,21 @@ h1, h2, h3, h4, h5, h6 {
     accent-color: #C1E329 !important;
 }
 
-/* Make collapsed checkbox labels still show the checkbox */
-.stCheckbox[data-testid="stCheckbox"] {
-    margin-top: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
+/* Position checkbox in top-right corner within persona-card-container */
+.persona-card-container .stCheckbox[data-testid="stCheckbox"] {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    margin: 0 !important;
+    z-index: 10 !important;
 }
 
-/* Center align checkboxes below persona cards */
-.stCheckbox {
-    display: flex !important;
-    justify-content: center !important;
+/* Ensure checkbox container within card doesn't take up space */
+.persona-card-container .stCheckbox {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    margin: 0 !important;
 }
 
 /* 7. FILE UPLOADER TEXT */
@@ -652,10 +663,13 @@ def main():
                             "behavioral_traits": char["behavioral_means"]
                         }
 
+                        # Wrap card and checkbox in container for positioning
+                        st.markdown('<div class="persona-card-container">', unsafe_allow_html=True)
+
                         st.markdown(render_compact_persona_card(cluster_id, persona_data, is_selected),
                                   unsafe_allow_html=True)
 
-                        # Hidden checkbox for selection
+                        # Checkbox positioned in top-right corner
                         if st.checkbox(f"select persona {cluster_id}",
                                      key=f"sel_{cluster_id}",
                                      value=is_selected,
@@ -665,6 +679,8 @@ def main():
                         else:
                             if cluster_id in st.session_state.selected_personas:
                                 st.session_state.selected_personas.remove(cluster_id)
+
+                        st.markdown('</div>', unsafe_allow_html=True)
 
             # Visualizations
             st.markdown("---")
@@ -717,10 +733,15 @@ def main():
                     for j, (cluster_id, persona) in enumerate(sorted_personas[i:i+cols_per_row]):
                         with cols[j]:
                             is_selected = cluster_id in st.session_state.selected_personas
+
+                            # Wrap card and checkbox in container for positioning
+                            st.markdown('<div class="persona-card-container">', unsafe_allow_html=True)
+
                             st.markdown(render_compact_persona_card(cluster_id, persona, is_selected),
                                       unsafe_allow_html=True)
 
-                            if st.checkbox(f"Select {persona['name']}",
+                            # Checkbox positioned in top-right corner
+                            if st.checkbox(f"select {persona['name']}",
                                          key=f"pre_{cluster_id}",
                                          value=is_selected,
                                          label_visibility="collapsed"):
@@ -729,6 +750,8 @@ def main():
                             else:
                                 if cluster_id in st.session_state.selected_personas:
                                     st.session_state.selected_personas.remove(cluster_id)
+
+                            st.markdown('</div>', unsafe_allow_html=True)
             except:
                 st.info("👆 configure clustering parameters and click 'run clustering' to discover personas")
 
