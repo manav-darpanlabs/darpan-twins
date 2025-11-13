@@ -165,14 +165,19 @@ st.markdown("""
 }
 
 /* COMPLETE slider override - remove ALL red */
-/* Slider background track (unfilled gray part) */
+/* Slider background track (unfilled gray/black part AFTER selection) */
 .stSlider [data-baseweb="slider"] > div:first-child {
-    background: #2a2a2a !important;
+    background: #1a1a1a !important;
 }
 
-/* Slider filled track (the green progress bar) */
+/* Slider filled track (the green progress bar UP TO selection point) */
 .stSlider [data-baseweb="slider"] > div:first-child > div {
-    background: #C1E329 !important;
+    background: linear-gradient(90deg, #C1E329 0%, #C1E329 100%) !important;
+}
+
+/* Additional specificity - ensure unfilled portion is dark */
+.stSlider [data-baseweb="slider"] [data-baseweb="tick-bar"] {
+    background: #1a1a1a !important;
 }
 
 /* Slider thumb (the draggable circle) */
@@ -347,11 +352,31 @@ h1, h2, h3, h4, h5, h6 {
     color: #ffffff !important;
 }
 
-/* 6. CHECKBOX TEXT */
+/* 6. CHECKBOX - Make prominent and visible */
 .stCheckbox label span,
 .stCheckbox > label > div,
 .stCheckbox label p {
     color: #ffffff !important;
+}
+
+/* Style the checkbox itself - larger and neon green when checked */
+.stCheckbox input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer !important;
+    accent-color: #C1E329 !important;
+}
+
+/* Make collapsed checkbox labels still show the checkbox */
+.stCheckbox[data-testid="stCheckbox"] {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Center align checkboxes below persona cards */
+.stCheckbox {
+    display: flex !important;
+    justify-content: center !important;
 }
 
 /* 7. FILE UPLOADER TEXT */
@@ -575,6 +600,10 @@ def main():
             if perform_clustering():
                 st.success("✅ Clustering completed successfully!")
                 st.balloons()
+
+        # Show placeholder or results
+        if not st.session_state.current_clustering:
+            st.info("👆 Click 'Run Clustering' above to discover customer personas dynamically")
 
         # Display results if available
         if st.session_state.current_clustering:
