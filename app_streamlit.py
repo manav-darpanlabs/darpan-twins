@@ -17,6 +17,7 @@ from twins.persona_visualizer import PersonaVisualizer
 from twins.prompt_simulator import run_dual_llm_for_users
 from twins.card_parser import extract_from_image
 from twins.weather import fetch_current_weather
+from twins.persona_assessor import PersonaAssessor
 
 # Default Indian cities
 DEFAULT_CITIES = [
@@ -474,6 +475,10 @@ def init_session_state():
         st.session_state.current_clustering = None
     if "analyzer" not in st.session_state:
         st.session_state.analyzer = DynamicPersonaAnalyzer()
+    if "assessor" not in st.session_state:
+        st.session_state.assessor = PersonaAssessor()
+    if "persona_assessments" not in st.session_state:
+        st.session_state.persona_assessments = {}
 
 def render_compact_persona_card(cluster_id, persona, is_selected):
     """Render a single compact persona card"""
@@ -563,7 +568,7 @@ def render_clustering_controls():
     return False
 
 def perform_clustering():
-    """Perform dynamic clustering"""
+    """Perform dynamic clustering and assess personas with LLM"""
     with st.spinner("🔍 discovering personas..."):
         analyzer = st.session_state.analyzer
 
@@ -581,14 +586,20 @@ def perform_clustering():
         if analyzer.umap_embedding is None:
             analyzer.generate_umap_embedding()
 
-        st.session_state.current_clustering = {
-            "labels": labels,
-            "metrics": metrics,
-            "characteristics": characteristics,
-            "summary": analyzer.get_cluster_summary()
-        }
+    # Assess personas with LLM (outside spinner to show progress separately)
+    with st.spinner("🤖 analyzing personas with llm assessor..."):
+        assessor = st.session_state.assessor
+        assessments = assessor.assess_all_personas(characteristics)
+        st.session_state.persona_assessments = assessments
 
-        return True
+    st.session_state.current_clustering = {
+        "labels": labels,
+        "metrics": metrics,
+        "characteristics": characteristics,
+        "summary": analyzer.get_cluster_summary()
+    }
+
+    return True
 
 def main():
     init_session_state()
@@ -615,7 +626,6 @@ def main():
         if should_cluster:
             if perform_clustering():
                 st.success("✅ clustering completed successfully!")
-                st.balloons()
 
         # Show placeholder or results
         if not st.session_state.current_clustering:
@@ -654,13 +664,20 @@ def main():
                     with cols[j]:
                         is_selected = str(cluster_id) in [str(x) for x in st.session_state.selected_personas]
 
-                        # Create mock persona dict for card
+                        # Get LLM-generated assessment if available
+                        assessment = st.session_state.persona_assessments.get(cluster_id, {})
+
+                        # Create persona dict for card with LLM-enriched data
                         persona_data = {
-                            "name": f"persona {cluster_id}",
-                            "tagline": f"cluster with {char['size']} twins",
+                            "name": assessment.get('name', f"persona {cluster_id}"),
+                            "tagline": assessment.get('tagline', f"cluster with {char['size']} twins"),
                             "size": char["size"],
                             "percentage": char["percentage"],
-                            "behavioral_traits": char["behavioral_means"]
+                            "behavioral_traits": char["behavioral_means"],
+                            "description": assessment.get('description', ''),
+                            "motivations": assessment.get('motivations', ''),
+                            "pain_points": assessment.get('pain_points', ''),
+                            "preferences": assessment.get('preferences', '')
                         }
 
                         # Wrap card and checkbox in container for positioning
