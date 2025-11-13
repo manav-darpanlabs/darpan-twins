@@ -10,7 +10,7 @@ a food delivery app's perspective.
 import os
 import json
 from typing import Dict, List, Optional
-from anthropic import Anthropic
+from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,15 +22,15 @@ class PersonaAssessor:
     of customer segments based on clustering data.
     """
 
-    def __init__(self, model: str = "claude-3-5-sonnet-20241022"):
+    def __init__(self, model: str = None):
         """
         Initialize the persona assessor.
 
         Args:
-            model: The Anthropic model to use for assessment
+            model: The OpenAI model to use for assessment (defaults to env LLM_MODEL)
         """
-        self.client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-        self.model = model
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.model = model or os.getenv("LLM_MODEL", "gpt-4o-mini")
 
     def assess_persona(
         self,
@@ -65,8 +65,8 @@ class PersonaAssessor:
         prompt = self._build_assessment_prompt(cluster_id, characteristics, context)
 
         try:
-            # Call the LLM
-            response = self.client.messages.create(
+            # Call the LLM (OpenAI format)
+            response = self.client.chat.completions.create(
                 model=self.model,
                 max_tokens=1500,
                 temperature=0.7,
@@ -78,14 +78,16 @@ class PersonaAssessor:
                 ]
             )
 
-            # Parse the response
-            response_text = response.content[0].text
+            # Parse the response (OpenAI format)
+            response_text = response.choices[0].message.content
             assessment = self._parse_assessment_response(response_text)
 
             return assessment
 
         except Exception as e:
-            print(f"Error in persona assessment: {e}")
+            print(f"Error in persona assessment for cluster {cluster_id}: {e}")
+            import traceback
+            traceback.print_exc()
             return self._get_fallback_assessment(cluster_id, characteristics)
 
     def _build_assessment_prompt(

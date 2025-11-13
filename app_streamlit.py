@@ -589,7 +589,11 @@ def perform_clustering():
     # Assess personas with LLM (outside spinner to show progress separately)
     with st.spinner("🤖 analyzing personas with llm assessor..."):
         assessor = st.session_state.assessor
+        print(f"DEBUG: Assessing {len(characteristics)} personas with LLM...")
         assessments = assessor.assess_all_personas(characteristics)
+        print(f"DEBUG: Received {len(assessments)} assessments")
+        for cid, assessment in assessments.items():
+            print(f"DEBUG: Persona {cid} -> {assessment.get('name', 'NO NAME')}: {assessment.get('tagline', 'NO TAGLINE')}")
         st.session_state.persona_assessments = assessments
 
     st.session_state.current_clustering = {
@@ -625,7 +629,8 @@ def main():
 
         if should_cluster:
             if perform_clustering():
-                st.success("✅ clustering completed successfully!")
+                num_assessments = len(st.session_state.persona_assessments)
+                st.success(f"✅ clustering completed successfully! {num_assessments} personas assessed with llm")
 
         # Show placeholder or results
         if not st.session_state.current_clustering:
@@ -666,6 +671,7 @@ def main():
 
                         # Get LLM-generated assessment if available
                         assessment = st.session_state.persona_assessments.get(cluster_id, {})
+                        print(f"DEBUG CARD: Cluster {cluster_id}, Assessment found: {bool(assessment)}, Name: {assessment.get('name', 'FALLBACK')}")
 
                         # Create persona dict for card with LLM-enriched data
                         persona_data = {

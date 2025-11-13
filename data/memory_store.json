@@ -196,5 +196,11 @@
     "context_summary": "at 19:00, ~28°C",
     "action": "A",
     "rationale": "Chose Card A due to its higher rating and the appeal of trying sushi, which aligns with an adventurous personality."
+  },
+  {
+    "user_id": "USER_001",
+    "context_summary": "at 19:00, ~28°C",
+    "action": "A",
+    "rationale": "Chose Card A due to its higher rating and the appeal of trying sushi, which aligns with their adventurous personality."
   }
 ]
