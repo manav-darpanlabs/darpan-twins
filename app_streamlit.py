@@ -44,11 +44,6 @@ st.markdown("""
     font-family: 'Inter', -apple-system, system-ui, sans-serif !important;
 }
 
-/* Force all text to lowercase globally */
-* {
-    text-transform: lowercase !important;
-}
-
 /* Compact persona cards grid */
 .persona-grid {
     display: grid;
@@ -107,19 +102,21 @@ st.markdown("""
     font-size: 0.85rem;
 }
 
-.persona-traits {
+.persona-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
+    margin-top: 0.5rem;
 }
 
-.trait-chip {
-    background: rgba(193, 227, 41, 0.1);
-    color: #C1E329;
+.tag-chip {
+    background: rgba(63, 177, 240, 0.15);
+    color: #3fb1f0;
     padding: 0.2rem 0.6rem;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    border: 1px solid rgba(63, 177, 240, 0.3);
 }
 
 /* Clustering panel */
@@ -133,6 +130,7 @@ st.markdown("""
 
 .stTabs [data-baseweb="tab-list"] {
     gap: 0.5rem;
+    justify-content: center;
 }
 
 .stTabs [data-baseweb="tab"] {
@@ -177,19 +175,28 @@ st.markdown("""
 }
 
 /* COMPLETE slider override - remove ALL red */
-/* Slider background track (unfilled gray/black part AFTER selection) */
-.stSlider [data-baseweb="slider"] > div:first-child {
-    background: #1a1a1a !important;
+/* Slider track container - this is the full background bar */
+.stSlider [data-baseweb="slider"] {
+    background: transparent !important;
 }
 
-/* Slider filled track (the green progress bar UP TO selection point) */
-.stSlider [data-baseweb="slider"] > div:first-child > div {
-    background: linear-gradient(90deg, #C1E329 0%, #C1E329 100%) !important;
+/* The inner track - full width background (unfilled portion) */
+.stSlider [data-baseweb="slider"] > div {
+    background: #2a2a2a !important;
 }
 
-/* Additional specificity - ensure unfilled portion is dark */
-.stSlider [data-baseweb="slider"] [data-baseweb="tick-bar"] {
-    background: #1a1a1a !important;
+/* The filled portion (progress bar from left to thumb) */
+.stSlider [data-baseweb="slider"] > div > div:first-child {
+    background: #C1E329 !important;
+}
+
+/* Override any track-fill or progress elements */
+.stSlider [data-baseweb="slider"] [class*="StyledTrack"] {
+    background: #2a2a2a !important;
+}
+
+.stSlider [data-baseweb="slider"] [class*="StyledTrackFill"] {
+    background: #C1E329 !important;
 }
 
 /* Slider thumb (the draggable circle) */
@@ -484,6 +491,18 @@ def render_compact_persona_card(cluster_id, persona, is_selected):
     """Render a single compact persona card"""
     selected_class = "selected" if is_selected else ""
 
+    # Get tags for display
+    tags = persona.get('tags', {})
+    tags_html = ""
+    if tags:
+        tag_chips = []
+        # Show only most relevant tags (first 2)
+        tag_order = ['price_sensitivity', 'exploration']
+        for tag_key in tag_order:
+            if tag_key in tags and tags[tag_key]:
+                tag_chips.append(f'<span class="tag-chip">{tags[tag_key]}</span>')
+        tags_html = f'<div class="persona-tags">{"".join(tag_chips[:2])}</div>'
+
     card_html = f"""
     <div class="persona-card {selected_class}">
         <div class="persona-name">{persona.get('name', f'persona {cluster_id}')}</div>
@@ -492,15 +511,13 @@ def render_compact_persona_card(cluster_id, persona, is_selected):
             <span>👥 {persona.get('size', 0)}</span>
             <span>📊 {persona.get('percentage', 0):.1f}%</span>
         </div>
+        {tags_html}
     </div>
     """
     return card_html
 
 def render_clustering_controls():
     """Render dynamic clustering control panel"""
-    st.markdown('<div class="clustering-panel">', unsafe_allow_html=True)
-    st.markdown("### 🔬 dynamic persona discovery")
-
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
@@ -522,7 +539,7 @@ def render_clustering_controls():
             "number of personas",
             min_value=5,
             max_value=20,
-            value=8,
+            value=st.session_state.clustering_params.get("n_clusters", 8),
             help="target number of personas"
         )
         st.session_state.clustering_params["n_clusters"] = n_clusters
@@ -532,7 +549,7 @@ def render_clustering_controls():
             "min twins per persona",
             min_value=20,
             max_value=100,
-            value=50,
+            value=st.session_state.clustering_params.get("min_cluster_size", 50),
             step=10,
             help="minimum cluster size"
         )
@@ -542,10 +559,8 @@ def render_clustering_controls():
         # Add vertical spacing to align with sliders
         st.markdown('<div style="height: 28px;"></div>', unsafe_allow_html=True)
         if st.button("🚀 run clustering", type="primary", use_container_width=True):
-            st.markdown('</div>', unsafe_allow_html=True)
             return True
 
-    st.markdown('</div>', unsafe_allow_html=True)
     return False
 
 def perform_clustering():
@@ -605,8 +620,13 @@ def main():
     with tab1:  # Personas Tab
         st.markdown("## discover customer personas")
 
-        # Clustering controls
-        should_cluster = render_clustering_controls()
+        # Clustering controls in collapsible expander
+        with st.expander("🔬 dynamic clustering", expanded=False):
+            should_cluster_inner = render_clustering_controls()
+            should_cluster = should_cluster_inner if should_cluster_inner else False
+
+        if 'should_cluster' not in locals():
+            should_cluster = False
 
         if should_cluster:
             if perform_clustering():
@@ -630,13 +650,89 @@ def main():
 
             st.markdown("---")
             st.markdown("### 🎯 discovered personas")
-            st.info("💡 click on personas to select them for experiments")
+
+            # Persona filters
+            st.markdown("#### 🔍 filter personas by tags")
+
+            # Collect all unique tags from assessments
+            all_tags = {
+                'price_sensitivity': set(),
+                'exploration': set(),
+                'decision_style': set(),
+                'order_frequency': set()
+            }
+
+            for assessment in st.session_state.persona_assessments.values():
+                tags = assessment.get('tags', {})
+                for category, value in tags.items():
+                    if category in all_tags and value:
+                        all_tags[category].add(value)
+
+            # Create filter UI
+            filter_cols = st.columns(4)
+            active_filters = {}
+
+            with filter_cols[0]:
+                price_options = ['all'] + sorted(list(all_tags['price_sensitivity']))
+                active_filters['price_sensitivity'] = st.selectbox(
+                    "price sensitivity",
+                    options=price_options,
+                    key="filter_price"
+                )
+
+            with filter_cols[1]:
+                exploration_options = ['all'] + sorted(list(all_tags['exploration']))
+                active_filters['exploration'] = st.selectbox(
+                    "exploration style",
+                    options=exploration_options,
+                    key="filter_exploration"
+                )
+
+            with filter_cols[2]:
+                decision_options = ['all'] + sorted(list(all_tags['decision_style']))
+                active_filters['decision_style'] = st.selectbox(
+                    "decision making",
+                    options=decision_options,
+                    key="filter_decision"
+                )
+
+            with filter_cols[3]:
+                frequency_options = ['all'] + sorted(list(all_tags['order_frequency']))
+                active_filters['order_frequency'] = st.selectbox(
+                    "order frequency",
+                    options=frequency_options,
+                    key="filter_frequency"
+                )
+
 
             # Render persona cards in grid
             characteristics = clustering["characteristics"]
-            sorted_personas = sorted(characteristics.items(),
+
+            # Apply filters
+            filtered_personas = []
+            for cluster_id, char in characteristics.items():
+                assessment = st.session_state.persona_assessments.get(cluster_id, {})
+                tags = assessment.get('tags', {})
+
+                # Check if persona matches all active filters
+                matches = True
+                for category, filter_value in active_filters.items():
+                    if filter_value != 'all':
+                        if tags.get(category) != filter_value:
+                            matches = False
+                            break
+
+                if matches:
+                    filtered_personas.append((cluster_id, char))
+
+            sorted_personas = sorted(filtered_personas,
                                     key=lambda x: x[1]['size'],
                                     reverse=True)
+
+            if not sorted_personas:
+                st.warning("⚠️ no personas match the selected filters. try adjusting your criteria.")
+            else:
+                st.markdown(f"**showing {len(sorted_personas)} of {len(characteristics)} personas**")
 
             # Create grid using columns
             cols_per_row = 4
@@ -660,7 +756,8 @@ def main():
                             "description": assessment.get('description', ''),
                             "motivations": assessment.get('motivations', ''),
                             "pain_points": assessment.get('pain_points', ''),
-                            "preferences": assessment.get('preferences', '')
+                            "preferences": assessment.get('preferences', ''),
+                            "tags": assessment.get('tags', {})
                         }
 
                         # Wrap card and checkbox in container for positioning
@@ -723,8 +820,84 @@ def main():
 
                 st.markdown("### 📚 pre-computed personas")
 
-                # Show pre-computed personas in grid
-                sorted_personas = sorted(personas.items(), key=lambda x: x[1]['size'], reverse=True)
+                # Persona filters
+                st.markdown("#### 🔍 filter personas by tags")
+
+                # Collect all unique tags from pre-computed personas
+                all_tags = {
+                    'price_sensitivity': set(),
+                    'exploration': set(),
+                    'decision_style': set(),
+                    'order_frequency': set()
+                }
+
+                for persona in personas.values():
+                    tags = persona.get('tags', {})
+                    for category, value in tags.items():
+                        if category in all_tags and value:
+                            all_tags[category].add(value)
+
+                # Create filter UI
+                filter_cols = st.columns(4)
+                active_filters = {}
+
+                with filter_cols[0]:
+                    price_options = ['all'] + sorted(list(all_tags['price_sensitivity']))
+                    active_filters['price_sensitivity'] = st.selectbox(
+                        "price sensitivity",
+                        options=price_options,
+                        key="filter_price_pre"
+                    )
+
+                with filter_cols[1]:
+                    exploration_options = ['all'] + sorted(list(all_tags['exploration']))
+                    active_filters['exploration'] = st.selectbox(
+                        "exploration style",
+                        options=exploration_options,
+                        key="filter_exploration_pre"
+                    )
+
+                with filter_cols[2]:
+                    decision_options = ['all'] + sorted(list(all_tags['decision_style']))
+                    active_filters['decision_style'] = st.selectbox(
+                        "decision making",
+                        options=decision_options,
+                        key="filter_decision_pre"
+                    )
+
+                with filter_cols[3]:
+                    frequency_options = ['all'] + sorted(list(all_tags['order_frequency']))
+                    active_filters['order_frequency'] = st.selectbox(
+                        "order frequency",
+                        options=frequency_options,
+                        key="filter_frequency_pre"
+                    )
+
+                # Apply filters to pre-computed personas
+                filtered_personas = []
+                for cluster_id, persona in personas.items():
+                    tags = persona.get('tags', {})
+
+                    # Check if persona matches all active filters
+                    matches = True
+                    for category, filter_value in active_filters.items():
+                        if filter_value != 'all':
+                            if tags.get(category) != filter_value:
+                                matches = False
+                                break
+
+                    if matches:
+                        filtered_personas.append((cluster_id, persona))
+
+                # Show count
+                if len(filtered_personas) < len(personas):
+                    st.caption(f"showing {len(filtered_personas)} of {len(personas)} personas")
+
+                if not filtered_personas:
+                    st.warning("⚠️ no personas match the selected filters. try adjusting your criteria.")
+                    sorted_personas = []
+                else:
+                    sorted_personas = sorted(filtered_personas, key=lambda x: x[1]['size'], reverse=True)
 
                 cols_per_row = 4
                 for i in range(0, len(sorted_personas), cols_per_row):
@@ -751,8 +924,45 @@ def main():
                                     st.session_state.selected_personas.remove(cluster_id)
 
                             st.markdown('</div>', unsafe_allow_html=True)
+
+                # OCEAN Traits Visualization for Pre-computed Personas
+                if st.session_state.selected_personas:
+                    st.markdown("---")
+                    st.markdown("### 🎨 ocean traits comparison")
+                    fig = go.Figure()
+
+                    for cluster_id in st.session_state.selected_personas[:5]:
+                        if str(cluster_id) in personas:
+                            ocean = personas[str(cluster_id)]["ocean_traits"]
+                            persona_name = personas[str(cluster_id)].get('name', f'persona {cluster_id}')
+                            fig.add_trace(go.Scatterpolar(
+                                r=[ocean['openness'], ocean['conscientiousness'],
+                                   ocean['extraversion'], ocean['agreeableness'], ocean['neuroticism']],
+                                theta=['openness', 'conscientiousness', 'extraversion',
+                                      'agreeableness', 'neuroticism'],
+                                fill='toself',
+                                name=persona_name
+                            ))
+
+                    fig.update_layout(
+                        polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
+                        showlegend=True,
+                        height=400,
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        font=dict(color='#ffffff')
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
             except:
                 st.info("👆 configure clustering parameters and click 'run clustering' to discover personas")
+
+        # Add navigation button at bottom of personas tab
+        if st.session_state.selected_personas:
+            st.markdown("---")
+            st.markdown("### 🎯 ready to experiment?")
+            st.markdown("you've selected personas. now test them against restaurant options!")
+            if st.button("🚀 go to experiments →", type="primary", use_container_width=True, key="nav_to_experiment"):
+                st.info("💡 click on the '🧪 experiment' tab above to run your experiment")
 
     with tab2:  # Experiment Tab
         st.markdown("## 🧪 persona-based experiments")
@@ -762,23 +972,26 @@ def main():
         else:
             st.success(f"✅ {len(st.session_state.selected_personas)} personas selected for experiment")
 
-            # Experiment setup
+            # Location & context
+            st.markdown("### 📍 location & context")
+            city_idx = st.selectbox(
+                "select city",
+                range(len(DEFAULT_CITIES)),
+                format_func=lambda i: DEFAULT_CITIES[i]["name"]
+            )
+
+            if city_idx is not None:
+                city = DEFAULT_CITIES[city_idx]
+                weather = fetch_current_weather(city["latitude"], city["longitude"])
+                if weather and not weather.get("error"):
+                    st.info(f"🌡️ {weather['temperature_c']:.0f}°C | 💧 {weather['precip_mm']:.1f}mm")
+
+            st.markdown("---")
+
+            # Restaurant cards in aligned columns
             col1, col2 = st.columns(2)
 
             with col1:
-                st.markdown("### 📍 location & context")
-                city_idx = st.selectbox(
-                    "select city",
-                    range(len(DEFAULT_CITIES)),
-                    format_func=lambda i: DEFAULT_CITIES[i]["name"]
-                )
-
-                if city_idx is not None:
-                    city = DEFAULT_CITIES[city_idx]
-                    weather = fetch_current_weather(city["latitude"], city["longitude"])
-                    if weather and not weather.get("error"):
-                        st.info(f"🌡️ {weather['temperature_c']:.0f}°C | 💧 {weather['precip_mm']:.1f}mm")
-
                 st.markdown("### 🍽️ restaurant card a")
                 file_a = st.file_uploader("upload card a", type=["png", "jpg", "jpeg"], key="card_a")
                 if file_a:
