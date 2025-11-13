@@ -155,36 +155,44 @@ st.markdown("""
     border-color: #8fa61f !important;
 }
 
-/* Override red sliders with neon green */
-.stSlider > div > div > div > div {
-    background-color: #C1E329 !important;
+/* COMPLETE slider override - remove ALL red */
+/* Slider background track (unfilled gray part) */
+.stSlider [data-baseweb="slider"] > div:first-child {
+    background: #2a2a2a !important;
 }
 
-.stSlider > div > div > div > div > div {
-    background-color: #C1E329 !important;
+/* Slider filled track (the green progress bar) */
+.stSlider [data-baseweb="slider"] > div:first-child > div {
+    background: #C1E329 !important;
 }
 
-.stSlider [role="slider"] {
-    background-color: #C1E329 !important;
-}
-
-.stSlider [data-baseweb="slider"] > div > div {
-    background-color: #C1E329 !important;
-}
-
+/* Slider thumb (the draggable circle) */
 .stSlider [data-baseweb="slider"] [role="slider"] {
     background-color: #C1E329 !important;
-    border: 2px solid #C1E329 !important;
+    border: none !important;
+    box-shadow: 0 0 0 0.2rem rgba(193, 227, 41, 0.3) !important;
 }
 
-/* Slider track (the filled part) */
-.stSlider [data-baseweb="slider"] > div:first-child > div:first-child {
+/* Slider thumb on hover */
+.stSlider [data-baseweb="slider"] [role="slider"]:hover {
+    background-color: #a8c424 !important;
+    box-shadow: 0 0 0 0.3rem rgba(193, 227, 41, 0.5) !important;
+}
+
+/* Slider thumb on focus/active */
+.stSlider [data-baseweb="slider"] [role="slider"]:focus,
+.stSlider [data-baseweb="slider"] [role="slider"]:active {
     background-color: #C1E329 !important;
+    box-shadow: 0 0 0 0.3rem rgba(193, 227, 41, 0.6) !important;
 }
 
-/* Slider thumb */
-.stSlider [data-baseweb="slider"] [role="slider"]:focus {
-    box-shadow: 0 0 0 0.2rem rgba(193, 227, 41, 0.5) !important;
+/* Remove any red from slider containers */
+.stSlider > div {
+    background: transparent !important;
+}
+
+.stSlider > div > div {
+    background: transparent !important;
 }
 
 /* Override any other red accents */
