@@ -269,6 +269,144 @@ label, .stSelectbox label, .stSlider label, .stNumberInput label,
 [data-testid="stTooltipHoverTarget"] {
     color: #888888 !important;
 }
+
+/* === COMPREHENSIVE RED TEXT ELIMINATION === */
+
+/* 1. ALL HEADINGS - Force white text */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+}
+
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3,
+[data-testid="stMarkdownContainer"] h4,
+[data-testid="stMarkdownContainer"] h5,
+[data-testid="stMarkdownContainer"] h6 {
+    color: #ffffff !important;
+}
+
+/* 2. TAB TEXT - Both active and inactive tabs */
+.stTabs [data-baseweb="tab"] p,
+.stTabs [data-baseweb="tab"] span,
+.stTabs [data-baseweb="tab"] div {
+    color: #ffffff !important;
+}
+
+.stTabs [aria-selected="true"] p,
+.stTabs [aria-selected="true"] span {
+    color: #ffffff !important;
+}
+
+/* 3. METRIC COMPONENTS - Stats numbers and labels */
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] p,
+[data-testid="stMetricLabel"] div,
+[data-testid="stMetricLabel"] span {
+    color: #ffffff !important;
+}
+
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] div,
+[data-testid="stMetricValue"] span {
+    color: #ffffff !important;
+}
+
+[data-testid="stMetricDelta"] {
+    color: #C1E329 !important;
+}
+
+/* 4. ALERT/INFO BOX TEXT */
+[data-testid="stAlert"] p,
+[data-testid="stAlert"] span,
+[data-testid="stAlert"] div,
+[data-testid="stAlert"] li {
+    color: #ffffff !important;
+}
+
+/* 5. DATAFRAME TEXT */
+[data-testid="stDataFrame"] {
+    color: #ffffff !important;
+}
+
+[data-testid="stDataFrame"] th {
+    color: #ffffff !important;
+    background-color: #2a2a2a !important;
+}
+
+[data-testid="stDataFrame"] td {
+    color: #ffffff !important;
+}
+
+/* 6. CHECKBOX TEXT */
+.stCheckbox label span,
+.stCheckbox > label > div,
+.stCheckbox label p {
+    color: #ffffff !important;
+}
+
+/* 7. FILE UPLOADER TEXT */
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] p,
+[data-testid="stFileUploader"] span {
+    color: #ffffff !important;
+}
+
+/* 8. SPINNER TEXT */
+[data-testid="stSpinner"],
+[data-testid="stSpinner"] > div,
+[data-testid="stSpinner"] p {
+    color: #C1E329 !important;
+}
+
+/* 9. GENERAL PARAGRAPH TEXT */
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] span,
+[data-testid="stMarkdownContainer"] div {
+    color: #ffffff !important;
+}
+
+/* 10. BODY TEXT FALLBACK */
+body {
+    color: #ffffff !important;
+}
+
+p, span {
+    color: #ffffff !important;
+}
+
+/* 11. PLOTLY CHART TEXT */
+.js-plotly-plot .plotly text {
+    fill: #ffffff !important;
+}
+
+.js-plotly-plot .plotly .xtick text,
+.js-plotly-plot .plotly .ytick text {
+    fill: #ffffff !important;
+}
+
+/* 12. SELECTBOX DROPDOWN TEXT */
+.stSelectbox [data-baseweb="select"] span,
+.stSelectbox [data-baseweb="select"] div {
+    color: #ffffff !important;
+}
+
+/* 13. NUMBER INPUT TEXT */
+.stNumberInput input {
+    color: #ffffff !important;
+}
+
+/* 14. TEXT INPUT TEXT */
+.stTextInput input,
+.stTextArea textarea {
+    color: #ffffff !important;
+}
+
+/* 15. CAPTION TEXT */
+[data-testid="stCaptionContainer"],
+.caption {
+    color: #888888 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 

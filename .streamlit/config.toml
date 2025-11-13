@@ -1,11 +1,12 @@
-[client]
-# Hide the deploy button that appears in the top-right corner
-toolbarMode = "minimal"
+# Streamlit Theme Configuration
+# Override default red theme with neon green/blue
 
-[runner]
-# Hide the "Deploy" menu
-fastReruns = false
+[theme]
+primaryColor = "#C1E329"              # Neon green (primary accent)
+backgroundColor = "#0E1117"           # Dark background
+secondaryBackgroundColor = "#141414"  # Slightly lighter dark
+textColor = "#ffffff"                 # White text (NO RED)
+font = "sans serif"
 
-[browser]
-# Disable gathering usage stats
-gatherUsageStats = false
+[server]
+headless = true
