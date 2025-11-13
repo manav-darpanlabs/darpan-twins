@@ -108,9 +108,9 @@ class PersonaAssessor:
         size = characteristics.get('size', 0)
         percentage = characteristics.get('percentage', 0)
 
-        prompt = f"""You are a Customer Insights Analyst specializing in user segmentation for a {context}.
-You have discovered a distinct customer persona through clustering analysis. Your task is to create a rich,
-insightful profile that helps the business understand and serve this segment better.
+        prompt = f"""You are a seasoned Product Manager at a leading {context} company (like Swiggy, Zomato, or DoorDash).
+You've just received clustering analysis data for a distinct customer segment. Your task is to describe this persona
+the way you would in a product strategy meeting or user research presentation - practical, insightful, and actionable.
 
 ## CLUSTER DATA FOR PERSONA {cluster_id}
 
@@ -160,30 +160,36 @@ Analyze this data holistically and generate a persona profile in the following J
   "preferences": "2-3 specific preferences for how they like to order food"
 }}
 
-## IMPORTANT GUIDELINES
+## GUIDELINES: Think like a PM
 
-1. **Be Specific and Contextual**: Don't just restate the numbers. Synthesize them into insights.
-   - Bad: "This persona has high novelty seeking"
-   - Good: "Always on the hunt for the next trending restaurant, they're the first to try new cuisines"
+1. **Product Manager Voice**: Write as if briefing your engineering and marketing teams
+   - Be specific about user behavior patterns
+   - Focus on what drives their decisions
+   - Highlight actionable product opportunities
 
-2. **Connect the Dots**: Show how traits interact
-   - Example: High openness + low budget sensitivity → "Willing to pay premium for unique culinary experiences"
-   - Example: High conscientiousness + high rating focus → "Meticulously researches restaurants, reads multiple reviews"
+2. **Real-World Context**: Ground insights in actual food delivery scenarios
+   - Example: "Opens the app during lunch hours when they're stressed and need quick decisions"
+   - Example: "Tends to order on weekends for family gatherings, so basket size matters more than speed"
 
-3. **Use Vivid Language**: Make the persona come alive
-   - Include lifestyle implications from age/income
-   - Reference real behaviors this persona would exhibit
-   - Use active, present-tense language
+3. **Synthesize, Don't List**: Connect the data points into a narrative
+   - Bad: "High openness (0.75), Low budget sensitivity (0.30)"
+   - Good (PM style): "These are our culinary adventurers - they'll pay ₹500 for authentic Korean bibimbap
+     because they're curious about new flavors, not because they have unlimited budgets"
 
-4. **Business-Relevant Insights**: Focus on actionable understanding
-   - What would make them order more?
-   - What would frustrate them?
-   - How should the app serve them?
+4. **Business Impact Focus**: Every description should hint at product strategy
+   - How do we acquire them? (marketing angle)
+   - How do we retain them? (product features)
+   - What's their lifetime value? (business model)
 
-5. **Realistic Nuance**: Real people are complex
-   - Avoid stereotypes
-   - Show both strengths and challenges
-   - Acknowledge trade-offs in their behavior
+5. **Authentic & Relatable**: Make it sound like a real person you'd meet
+   - Use natural language: "They're the ones who..." or "You'll find them..."
+   - Reference real behaviors: "checks restaurant ratings religiously" vs "high rating focus"
+   - Avoid jargon unless it's how PMs actually talk
+
+6. **Concise but Rich**: Every word should add insight
+   - Name: Catchy, memorable, immediately conveys their key trait
+   - Tagline: ONE sentence that makes the team go "oh, I know exactly who that is!"
+   - Description: 2-3 sentences max, but pack them with behavioral insights
 
 Return ONLY the JSON object, no other text."""
 

@@ -484,22 +484,6 @@ def render_compact_persona_card(cluster_id, persona, is_selected):
     """Render a single compact persona card"""
     selected_class = "selected" if is_selected else ""
 
-    # Get top 3 behavioral traits
-    behavioral = persona.get('behavioral_traits', {})
-    top_traits = []
-    if behavioral.get('novelty_seeking', 0) > 0.6:
-        top_traits.append("adventurous")
-    if behavioral.get('budget_sensitivity', 0) > 0.6:
-        top_traits.append("budget-conscious")
-    if behavioral.get('rating_focus', 0) > 0.6:
-        top_traits.append("quality-focused")
-    if behavioral.get('distance_tolerance', 0) > 0.6:
-        top_traits.append("distance-flexible")
-
-    if not top_traits:
-        top_traits = ["balanced", "contextual", "adaptive"]
-    top_traits = top_traits[:3]
-
     card_html = f"""
     <div class="persona-card {selected_class}">
         <div class="persona-name">{persona.get('name', f'persona {cluster_id}')}</div>
@@ -507,9 +491,6 @@ def render_compact_persona_card(cluster_id, persona, is_selected):
         <div class="persona-stats">
             <span>👥 {persona.get('size', 0)}</span>
             <span>📊 {persona.get('percentage', 0):.1f}%</span>
-        </div>
-        <div class="persona-traits">
-            {"".join([f'<span class="trait-chip">{trait}</span>' for trait in top_traits])}
         </div>
     </div>
     """
