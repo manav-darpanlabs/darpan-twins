@@ -136,6 +136,24 @@ st.markdown("""
     background: linear-gradient(135deg, rgba(193, 227, 41, 0.1) 0%, rgba(63, 177, 240, 0.05) 100%);
     border: 2px solid #C1E329;
 }
+
+/* Override Streamlit's red primary button with neon green */
+.stButton > button[kind="primary"] {
+    background-color: #C1E329 !important;
+    border-color: #C1E329 !important;
+    color: #000000 !important;
+}
+
+.stButton > button[kind="primary"]:hover {
+    background-color: #a8c424 !important;
+    border-color: #a8c424 !important;
+    box-shadow: 0 0 20px rgba(193, 227, 41, 0.4) !important;
+}
+
+.stButton > button[kind="primary"]:active {
+    background-color: #8fa61f !important;
+    border-color: #8fa61f !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
