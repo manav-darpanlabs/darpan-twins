@@ -14,5 +14,24 @@
     "income": 1446434.9800833997,
     "place_of_birth_avg_income": 998237.9722018322,
     "place_of_birth_food_variety_index": 0.5138528942706792
+  },
+  "persona": {
+    "cluster_id": 10,
+    "persona_name": "Social Food Adventurers",
+    "persona_tagline": "Enthusiastic diners who seek new culinary experiences with friends.",
+    "assignment_confidence": 0.996053063987316,
+    "cluster_probabilities": [
+      0.0,
+      1.5172490868357744e-06,
+      0.0,
+      0.0,
+      5.614225821284743e-06,
+      0.003880936019075905,
+      1.1320428473582315e-10,
+      0.0,
+      0.0,
+      5.886840549416779e-05,
+      0.996053063987316
+    ]
   }
 }

@@ -14,5 +14,24 @@
     "income": 395288.576706244,
     "place_of_birth_avg_income": 109116.53013409878,
     "place_of_birth_food_variety_index": 0.6616675082471307
+  },
+  "persona": {
+    "cluster_id": 5,
+    "persona_name": "Curious Foodies",
+    "persona_tagline": "Adventurous eaters exploring diverse cuisines without breaking the bank.",
+    "assignment_confidence": 0.9739844623388585,
+    "cluster_probabilities": [
+      0.0,
+      4.496082861444376e-10,
+      0.0,
+      0.0,
+      4.695999972449579e-30,
+      0.9739844623388585,
+      0.02008140532441037,
+      0.0,
+      0.0,
+      0.005934131887123087,
+      6.6362255724453e-27
+    ]
   }
 }

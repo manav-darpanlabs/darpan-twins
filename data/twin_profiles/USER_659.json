@@ -14,5 +14,24 @@
     "income": 519633.1626789872,
     "place_of_birth_avg_income": 484182.95806377067,
     "place_of_birth_food_variety_index": 0.0
+  },
+  "persona": {
+    "cluster_id": 6,
+    "persona_name": "Savvy Taste Seekers",
+    "persona_tagline": "Exploring diverse flavors while minding their budget.",
+    "assignment_confidence": 0.9960143200917682,
+    "cluster_probabilities": [
+      0.0,
+      0.0014491690261863707,
+      0.0,
+      0.0,
+      2.1484376719781196e-10,
+      1.1358433681507473e-05,
+      0.9960143200917682,
+      0.0,
+      0.0,
+      0.0025251522335201348,
+      1.580176103652524e-64
+    ]
   }
 }

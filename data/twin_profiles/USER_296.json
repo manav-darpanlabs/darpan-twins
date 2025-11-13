@@ -14,5 +14,24 @@
     "income": 957149.5382565609,
     "place_of_birth_avg_income": 292018.2999829045,
     "place_of_birth_food_variety_index": 0.1291608492890394
+  },
+  "persona": {
+    "cluster_id": 4,
+    "persona_name": "Mindful Flavor Enthusiasts",
+    "persona_tagline": "Conscientious food lovers who prioritize quality and enjoy exploring new tastes.",
+    "assignment_confidence": 0.703380747941029,
+    "cluster_probabilities": [
+      0.0,
+      6.689081635778287e-05,
+      0.0,
+      0.0,
+      0.703380747941029,
+      2.6167736878518713e-07,
+      0.2965518856719518,
+      0.0,
+      0.0,
+      2.1389329206447188e-07,
+      1.6969134731398653e-100
+    ]
   }
 }

@@ -1,0 +1,411 @@
+{
+  "0": {
+    "name": "Curious Budgeteers",
+    "tagline": "Adventurous eaters who watch their wallets while exploring new flavors.",
+    "key_traits": [
+      "Novelty Seeking",
+      "Budget Sensitivity",
+      "Extraversion",
+      "Agreeableness"
+    ],
+    "food_preferences": "Enjoy diverse cuisines, favoring affordable yet unique dining options.",
+    "decision_pattern": "They prioritize trying new dishes while ensuring they fit within budget constraints.",
+    "representative_quote": "Why not try something new? Just need to keep it budget-friendly!",
+    "cluster_id": 0,
+    "size": 200,
+    "percentage": 20.0,
+    "ocean_traits": {
+      "openness": 0.529543091353051,
+      "conscientiousness": 0.48658804204936035,
+      "extraversion": 0.5244222466920432,
+      "agreeableness": 0.5149989915661449,
+      "neuroticism": 0.4185052871153968
+    },
+    "demographics": {
+      "age": 28.605,
+      "income": 383999.98145031184,
+      "gender_distribution": {
+        "male": 1.0,
+        "female": 0.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5247037513323275,
+      "budget_sensitivity": 0.46595862253301834,
+      "distance_tolerance": 0.29501038015121706,
+      "rating_focus": 0.49795242185607413
+    }
+  },
+  "6": {
+    "name": "Savvy Taste Seekers",
+    "tagline": "Exploring diverse flavors while minding their budget.",
+    "key_traits": [
+      "Budget Sensitivity",
+      "Novelty Seeking",
+      "Agreeableness"
+    ],
+    "food_preferences": "Enjoys trying new cuisines, especially affordable and trendy options.",
+    "decision_pattern": "Prioritizes value and taste in food choices, often seeking recommendations.",
+    "representative_quote": "I love discovering new dishes that won't break the bank!",
+    "cluster_id": 6,
+    "size": 165,
+    "percentage": 16.5,
+    "ocean_traits": {
+      "openness": 0.4684125145300026,
+      "conscientiousness": 0.4171418268080338,
+      "extraversion": 0.5009234602679358,
+      "agreeableness": 0.5502160710686462,
+      "neuroticism": 0.43618116803479207
+    },
+    "demographics": {
+      "age": 31.90909090909091,
+      "income": 672958.4902138357,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5027462121285916,
+      "budget_sensitivity": 0.5095196706133791,
+      "distance_tolerance": 0.26338222865632444,
+      "rating_focus": 0.4703715245122787
+    }
+  },
+  "9": {
+    "name": "Adventurous Budgeteers",
+    "tagline": "Curious food lovers exploring affordable culinary delights.",
+    "key_traits": [
+      "Novelty Seeking",
+      "Budget Sensitivity",
+      "Moderate Extraversion"
+    ],
+    "food_preferences": "They enjoy trying new cuisines while keeping an eye on their spending.",
+    "decision_pattern": "They prioritize new food experiences within a budget-friendly range, often relying on ratings.",
+    "representative_quote": "I love discovering new flavors, but I always check for the best deals!",
+    "cluster_id": 9,
+    "size": 147,
+    "percentage": 14.7,
+    "ocean_traits": {
+      "openness": 0.6306707306324926,
+      "conscientiousness": 0.42706066666782666,
+      "extraversion": 0.536552753326943,
+      "agreeableness": 0.5011286977400619,
+      "neuroticism": 0.5052468272807256
+    },
+    "demographics": {
+      "age": 25.01360544217687,
+      "income": 404239.47459944163,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.6133513114423969,
+      "budget_sensitivity": 0.5390930803064494,
+      "distance_tolerance": 0.2964917499384467,
+      "rating_focus": 0.45668787909672076
+    }
+  },
+  "2": {
+    "name": "Gastronomic Enthusiasts",
+    "tagline": "Adventurous eaters seeking new culinary experiences on a budget.",
+    "key_traits": [
+      "Extraverted",
+      "Open-minded",
+      "Moderately agreeable"
+    ],
+    "food_preferences": "Enjoy diverse cuisines with a mix of trendy and traditional dishes.",
+    "decision_pattern": "Favor well-rated options while balancing novelty and affordability.",
+    "representative_quote": "Let's try that new place; I heard their fusion dishes are incredible!",
+    "cluster_id": 2,
+    "size": 121,
+    "percentage": 12.1,
+    "ocean_traits": {
+      "openness": 0.5942656670905486,
+      "conscientiousness": 0.47148711326928366,
+      "extraversion": 0.5465294388906139,
+      "agreeableness": 0.5608635535541351,
+      "neuroticism": 0.4395212918093929
+    },
+    "demographics": {
+      "age": 31.487603305785125,
+      "income": 717213.6145531465,
+      "gender_distribution": {
+        "male": 1.0,
+        "female": 0.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5745398329825988,
+      "budget_sensitivity": 0.48401708927005455,
+      "distance_tolerance": 0.31491440920966013,
+      "rating_focus": 0.5072376893832242
+    }
+  },
+  "8": {
+    "name": "Balanced Food Navigators",
+    "tagline": "Mediating taste and budget for satisfying meal decisions.",
+    "key_traits": [
+      "Moderate Novelty Seeking",
+      "Budget Conscious",
+      "Quality Focused"
+    ],
+    "food_preferences": "Enjoy diverse cuisines but prioritize quality ratings and affordability.",
+    "decision_pattern": "They compare options based on ratings and prices before deciding.",
+    "representative_quote": "I want something new, but it has to be worth my money.",
+    "cluster_id": 8,
+    "size": 109,
+    "percentage": 10.9,
+    "ocean_traits": {
+      "openness": 0.5484698341297818,
+      "conscientiousness": 0.49067194181736595,
+      "extraversion": 0.5107320237644942,
+      "agreeableness": 0.6239986800369078,
+      "neuroticism": 0.4478459368283845
+    },
+    "demographics": {
+      "age": 33.403669724770644,
+      "income": 879286.1411109729,
+      "gender_distribution": {
+        "male": 1.0,
+        "female": 0.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5367273013456375,
+      "budget_sensitivity": 0.47858699750550926,
+      "distance_tolerance": 0.28177940003613744,
+      "rating_focus": 0.5440026371051826
+    }
+  },
+  "5": {
+    "name": "Curious Foodies",
+    "tagline": "Adventurous eaters exploring diverse cuisines without breaking the bank.",
+    "key_traits": [
+      "Novelty Seeking",
+      "Extraversion",
+      "Agreeableness"
+    ],
+    "food_preferences": "Enjoys trying new dishes, especially from local and international cuisines, favors healthy options.",
+    "decision_pattern": "Chooses based on reviews, trendy dishes, and recommendations from friends.",
+    "representative_quote": "I love discovering new flavors and sharing them with my friends!",
+    "cluster_id": 5,
+    "size": 106,
+    "percentage": 10.6,
+    "ocean_traits": {
+      "openness": 0.6190856480606426,
+      "conscientiousness": 0.48535081538301883,
+      "extraversion": 0.6048255615375084,
+      "agreeableness": 0.5784474783512673,
+      "neuroticism": 0.44593750945249633
+    },
+    "demographics": {
+      "age": 34.14150943396226,
+      "income": 810793.2003150097,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5877547090275442,
+      "budget_sensitivity": 0.48029334703473875,
+      "distance_tolerance": 0.35293121369888464,
+      "rating_focus": 0.5225894805703183
+    }
+  },
+  "1": {
+    "name": "Quality Conscious Culinarians",
+    "tagline": "Detail-oriented diners who value quality and enjoy exploratory tastes.",
+    "key_traits": [
+      "Conscientious",
+      "Agreeable",
+      "Novelty Seeking"
+    ],
+    "food_preferences": "They prefer fresh, organic ingredients with an emphasis on diverse and intriguing flavors.",
+    "decision_pattern": "They meticulously compare reviews and ratings before placing an order.",
+    "representative_quote": "I love trying new dishes, but only if they come highly recommended.",
+    "cluster_id": 1,
+    "size": 46,
+    "percentage": 4.6,
+    "ocean_traits": {
+      "openness": 0.5505012935952663,
+      "conscientiousness": 0.5985006863738394,
+      "extraversion": 0.32854531109162755,
+      "agreeableness": 0.6535001365536486,
+      "neuroticism": 0.4104821588310603
+    },
+    "demographics": {
+      "age": 36.93478260869565,
+      "income": 810241.2565006217,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5058006996045343,
+      "budget_sensitivity": 0.40599073622861065,
+      "distance_tolerance": 0.18408279772471164,
+      "rating_focus": 0.6205004664457631
+    }
+  },
+  "4": {
+    "name": "Mindful Flavor Enthusiasts",
+    "tagline": "Conscientious food lovers who prioritize quality and enjoy exploring new tastes.",
+    "key_traits": [
+      "High Conscientiousness",
+      "Moderate Openness",
+      "Quality-Focused"
+    ],
+    "food_preferences": "They prefer fresh, high-quality ingredients and are open to trying new cuisines.",
+    "decision_pattern": "They rely on ratings and reviews to ensure a satisfying dining experience.",
+    "representative_quote": "I always choose the best-rated options that align with my values.",
+    "cluster_id": 4,
+    "size": 43,
+    "percentage": 4.3,
+    "ocean_traits": {
+      "openness": 0.5318912171733277,
+      "conscientiousness": 0.7501395937142638,
+      "extraversion": 0.5118632366941226,
+      "agreeableness": 0.5674124929617653,
+      "neuroticism": 0.22214725689952075
+    },
+    "demographics": {
+      "age": 34.72093023255814,
+      "income": 561732.9939005194,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.44728197390705016,
+      "budget_sensitivity": 0.2360038315926285,
+      "distance_tolerance": 0.34685200838128283,
+      "rating_focus": 0.6770487534132644
+    }
+  },
+  "3": {
+    "name": "Balanced Taste Explorers",
+    "tagline": "Adventurous yet practical, they seek exciting flavors without breaking the bank.",
+    "key_traits": [
+      "Curious",
+      "Moderately Budget-Conscious",
+      "Sociable",
+      "Quality-Driven"
+    ],
+    "food_preferences": "Enjoy diverse cuisines, favoring healthy options and unique flavor profiles.",
+    "decision_pattern": "They choose based on ratings and cost-effectiveness, valuing both quality and variety.",
+    "representative_quote": "I love trying new dishes, but I also want great value for my money!",
+    "cluster_id": 3,
+    "size": 40,
+    "percentage": 4.0,
+    "ocean_traits": {
+      "openness": 0.5441996987210592,
+      "conscientiousness": 0.518211266054351,
+      "extraversion": 0.517461399723887,
+      "agreeableness": 0.5717693522597125,
+      "neuroticism": 0.3648294605080239
+    },
+    "demographics": {
+      "age": 30.35,
+      "income": 628397.9008108061,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 0.0,
+        "other": 1.0
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5254764092884361,
+      "budget_sensitivity": 0.4233090972268364,
+      "distance_tolerance": 0.30986794142613683,
+      "rating_focus": 0.5396345005364956
+    }
+  },
+  "10": {
+    "name": "Social Food Adventurers",
+    "tagline": "Enthusiastic diners who seek new culinary experiences with friends.",
+    "key_traits": [
+      "Extraversion",
+      "Openness",
+      "Novelty Seeking"
+    ],
+    "food_preferences": "Enjoy diverse cuisines and trendy dishes, often sharing meals with others.",
+    "decision_pattern": "Choose based on social recommendations and exciting new options.",
+    "representative_quote": "Let's try that new place everyone's talking about!",
+    "cluster_id": 10,
+    "size": 14,
+    "percentage": 1.4000000000000001,
+    "ocean_traits": {
+      "openness": 0.5890775476609574,
+      "conscientiousness": 0.46246877923493507,
+      "extraversion": 0.6091289662893943,
+      "agreeableness": 0.4599640545709352,
+      "neuroticism": 0.3480055744850188
+    },
+    "demographics": {
+      "age": 34.357142857142854,
+      "income": 850108.4354168706,
+      "gender_distribution": {
+        "male": 0.21428571428571427,
+        "female": 0.5,
+        "other": 0.2857142857142857
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.5736136495921896,
+      "budget_sensitivity": 0.4427683976250419,
+      "distance_tolerance": 0.3788912169603224,
+      "rating_focus": 0.46146688936933516
+    }
+  },
+  "7": {
+    "name": "Conscientious Food Enthusiasts",
+    "tagline": "Quality-focused individuals who prioritize culinary excellence within their budget.",
+    "key_traits": [
+      "Conscientious",
+      "Extraverted",
+      "Quality-Oriented"
+    ],
+    "food_preferences": "They favor high-quality, well-reviewed dishes and local specialties.",
+    "decision_pattern": "They rely on ratings and reviews, balancing quality with reasonable pricing.",
+    "representative_quote": "I always look for the best-rated options that fit my budget.",
+    "cluster_id": 7,
+    "size": 9,
+    "percentage": 0.8999999999999999,
+    "ocean_traits": {
+      "openness": 0.41454714251265246,
+      "conscientiousness": 0.6266375891901238,
+      "extraversion": 0.584416624589273,
+      "agreeableness": 0.5261223528450237,
+      "neuroticism": 0.29302229876539726
+    },
+    "demographics": {
+      "age": 39.888888888888886,
+      "income": 1799042.288208523,
+      "gender_distribution": {
+        "male": 0.7777777777777778,
+        "female": 0.0,
+        "other": 0.2222222222222222
+      }
+    },
+    "behavioral_traits": {
+      "novelty_seeking": 0.4021917230018196,
+      "budget_sensitivity": 0.3331923547876367,
+      "distance_tolerance": 0.3456527136264751,
+      "rating_focus": 0.5864314946520838
+    }
+  }
+}

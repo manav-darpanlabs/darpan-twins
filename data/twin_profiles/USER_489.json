@@ -14,5 +14,24 @@
     "income": 419334.0156322227,
     "place_of_birth_avg_income": 117143.15100394751,
     "place_of_birth_food_variety_index": 0.7346400726201906
+  },
+  "persona": {
+    "cluster_id": 7,
+    "persona_name": "Conscientious Food Enthusiasts",
+    "persona_tagline": "Quality-focused individuals who prioritize culinary excellence within their budget.",
+    "assignment_confidence": 0.9999999999793339,
+    "cluster_probabilities": [
+      0.0,
+      0.0,
+      0.0,
+      2.0666216673820672e-11,
+      0.0,
+      0.0,
+      0.0,
+      0.9999999999793339,
+      0.0,
+      0.0,
+      2.787138504043254e-39
+    ]
   }
 }

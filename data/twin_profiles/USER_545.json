@@ -14,5 +14,24 @@
     "income": 479016.30351761763,
     "place_of_birth_avg_income": 254162.3882466606,
     "place_of_birth_food_variety_index": 0.29925590641475397
+  },
+  "persona": {
+    "cluster_id": 0,
+    "persona_name": "Curious Budgeteers",
+    "persona_tagline": "Adventurous eaters who watch their wallets while exploring new flavors.",
+    "assignment_confidence": 0.5267492081075033,
+    "cluster_probabilities": [
+      0.5267492081075033,
+      0.0,
+      0.45457820577865954,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.018672552390349494,
+      0.0,
+      3.372348800468736e-08
+    ]
   }
 }

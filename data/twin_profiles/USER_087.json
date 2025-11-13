@@ -14,5 +14,24 @@
     "income": 655753.4856666605,
     "place_of_birth_avg_income": 308947.0480270721,
     "place_of_birth_food_variety_index": 0.308166444640872
+  },
+  "persona": {
+    "cluster_id": 3,
+    "persona_name": "Balanced Taste Explorers",
+    "persona_tagline": "Adventurous yet practical, they seek exciting flavors without breaking the bank.",
+    "assignment_confidence": 1.0,
+    "cluster_probabilities": [
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      3.095897804357939e-26
+    ]
   }
 }

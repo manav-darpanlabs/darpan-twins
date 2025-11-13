@@ -14,5 +14,24 @@
     "income": 815863.4199438415,
     "place_of_birth_avg_income": 612289.5814069752,
     "place_of_birth_food_variety_index": 0.6410675321749565
+  },
+  "persona": {
+    "cluster_id": 1,
+    "persona_name": "Quality Conscious Culinarians",
+    "persona_tagline": "Detail-oriented diners who value quality and enjoy exploratory tastes.",
+    "assignment_confidence": 0.9858593726791727,
+    "cluster_probabilities": [
+      0.0,
+      0.9858593726791727,
+      0.0,
+      0.0,
+      2.406473626487254e-08,
+      0.01390989560441708,
+      0.00023070753411572338,
+      0.0,
+      0.0,
+      1.1755820054561438e-10,
+      2.5614166006802757e-33
+    ]
   }
 }

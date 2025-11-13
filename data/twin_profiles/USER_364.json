@@ -14,5 +14,24 @@
     "income": 647379.7485459804,
     "place_of_birth_avg_income": 629201.7047467788,
     "place_of_birth_food_variety_index": 0.8323552067563048
+  },
+  "persona": {
+    "cluster_id": 8,
+    "persona_name": "Balanced Food Navigators",
+    "persona_tagline": "Mediating taste and budget for satisfying meal decisions.",
+    "assignment_confidence": 0.9910462120816323,
+    "cluster_probabilities": [
+      0.00895351663597174,
+      0.0,
+      2.7128239626163036e-07,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.9910462120816323,
+      0.0,
+      2.3740490401547875e-21
+    ]
   }
 }

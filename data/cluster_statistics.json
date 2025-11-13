@@ -1,0 +1,430 @@
+{
+  "0": {
+    "cluster_id": 0,
+    "size": 200,
+    "percentage": 20.0,
+    "member_ids": [
+      "USER_001",
+      "USER_004",
+      "USER_035",
+      "USER_043",
+      "USER_048",
+      "USER_050",
+      "USER_052",
+      "USER_058",
+      "USER_065",
+      "USER_069"
+    ],
+    "ocean_means": {
+      "openness": 0.529543091353051,
+      "conscientiousness": 0.48658804204936035,
+      "extraversion": 0.5244222466920432,
+      "agreeableness": 0.5149989915661449,
+      "neuroticism": 0.4185052871153968
+    },
+    "demographic_means": {
+      "age": 28.605,
+      "income": 383999.98145031184,
+      "gender_distribution": {
+        "male": 1.0,
+        "female": 0.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5247037513323275,
+      "budget_sensitivity": 0.46595862253301834,
+      "distance_tolerance": 0.29501038015121706,
+      "rating_focus": 0.49795242185607413
+    }
+  },
+  "1": {
+    "cluster_id": 1,
+    "size": 46,
+    "percentage": 4.6,
+    "member_ids": [
+      "USER_028",
+      "USER_041",
+      "USER_059",
+      "USER_111",
+      "USER_151",
+      "USER_183",
+      "USER_223",
+      "USER_263",
+      "USER_344",
+      "USER_370"
+    ],
+    "ocean_means": {
+      "openness": 0.5505012935952663,
+      "conscientiousness": 0.5985006863738394,
+      "extraversion": 0.32854531109162755,
+      "agreeableness": 0.6535001365536486,
+      "neuroticism": 0.4104821588310603
+    },
+    "demographic_means": {
+      "age": 36.93478260869565,
+      "income": 810241.2565006217,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5058006996045343,
+      "budget_sensitivity": 0.40599073622861065,
+      "distance_tolerance": 0.18408279772471164,
+      "rating_focus": 0.6205004664457631
+    }
+  },
+  "2": {
+    "cluster_id": 2,
+    "size": 121,
+    "percentage": 12.1,
+    "member_ids": [
+      "USER_003",
+      "USER_005",
+      "USER_006",
+      "USER_014",
+      "USER_021",
+      "USER_022",
+      "USER_025",
+      "USER_030",
+      "USER_072",
+      "USER_074"
+    ],
+    "ocean_means": {
+      "openness": 0.5942656670905486,
+      "conscientiousness": 0.47148711326928366,
+      "extraversion": 0.5465294388906139,
+      "agreeableness": 0.5608635535541351,
+      "neuroticism": 0.4395212918093929
+    },
+    "demographic_means": {
+      "age": 31.487603305785125,
+      "income": 717213.6145531465,
+      "gender_distribution": {
+        "male": 1.0,
+        "female": 0.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5745398329825988,
+      "budget_sensitivity": 0.48401708927005455,
+      "distance_tolerance": 0.31491440920966013,
+      "rating_focus": 0.5072376893832242
+    }
+  },
+  "3": {
+    "cluster_id": 3,
+    "size": 40,
+    "percentage": 4.0,
+    "member_ids": [
+      "USER_019",
+      "USER_036",
+      "USER_042",
+      "USER_055",
+      "USER_064",
+      "USER_087",
+      "USER_123",
+      "USER_161",
+      "USER_166",
+      "USER_169"
+    ],
+    "ocean_means": {
+      "openness": 0.5441996987210592,
+      "conscientiousness": 0.518211266054351,
+      "extraversion": 0.517461399723887,
+      "agreeableness": 0.5717693522597125,
+      "neuroticism": 0.3648294605080239
+    },
+    "demographic_means": {
+      "age": 30.35,
+      "income": 628397.9008108061,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 0.0,
+        "other": 1.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5254764092884361,
+      "budget_sensitivity": 0.4233090972268364,
+      "distance_tolerance": 0.30986794142613683,
+      "rating_focus": 0.5396345005364956
+    }
+  },
+  "4": {
+    "cluster_id": 4,
+    "size": 43,
+    "percentage": 4.3,
+    "member_ids": [
+      "USER_027",
+      "USER_037",
+      "USER_051",
+      "USER_105",
+      "USER_115",
+      "USER_132",
+      "USER_136",
+      "USER_145",
+      "USER_197",
+      "USER_217"
+    ],
+    "ocean_means": {
+      "openness": 0.5318912171733277,
+      "conscientiousness": 0.7501395937142638,
+      "extraversion": 0.5118632366941226,
+      "agreeableness": 0.5674124929617653,
+      "neuroticism": 0.22214725689952075
+    },
+    "demographic_means": {
+      "age": 34.72093023255814,
+      "income": 561732.9939005194,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.44728197390705016,
+      "budget_sensitivity": 0.2360038315926285,
+      "distance_tolerance": 0.34685200838128283,
+      "rating_focus": 0.6770487534132644
+    }
+  },
+  "5": {
+    "cluster_id": 5,
+    "size": 106,
+    "percentage": 10.6,
+    "member_ids": [
+      "USER_009",
+      "USER_015",
+      "USER_029",
+      "USER_068",
+      "USER_071",
+      "USER_073",
+      "USER_076",
+      "USER_095",
+      "USER_099",
+      "USER_112"
+    ],
+    "ocean_means": {
+      "openness": 0.6190856480606426,
+      "conscientiousness": 0.48535081538301883,
+      "extraversion": 0.6048255615375084,
+      "agreeableness": 0.5784474783512673,
+      "neuroticism": 0.44593750945249633
+    },
+    "demographic_means": {
+      "age": 34.14150943396226,
+      "income": 810793.2003150097,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5877547090275442,
+      "budget_sensitivity": 0.48029334703473875,
+      "distance_tolerance": 0.35293121369888464,
+      "rating_focus": 0.5225894805703183
+    }
+  },
+  "6": {
+    "cluster_id": 6,
+    "size": 165,
+    "percentage": 16.5,
+    "member_ids": [
+      "USER_008",
+      "USER_011",
+      "USER_013",
+      "USER_016",
+      "USER_020",
+      "USER_038",
+      "USER_056",
+      "USER_060",
+      "USER_063",
+      "USER_070"
+    ],
+    "ocean_means": {
+      "openness": 0.4684125145300026,
+      "conscientiousness": 0.4171418268080338,
+      "extraversion": 0.5009234602679358,
+      "agreeableness": 0.5502160710686462,
+      "neuroticism": 0.43618116803479207
+    },
+    "demographic_means": {
+      "age": 31.90909090909091,
+      "income": 672958.4902138357,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5027462121285916,
+      "budget_sensitivity": 0.5095196706133791,
+      "distance_tolerance": 0.26338222865632444,
+      "rating_focus": 0.4703715245122787
+    }
+  },
+  "7": {
+    "cluster_id": 7,
+    "size": 9,
+    "percentage": 0.8999999999999999,
+    "member_ids": [
+      "USER_010",
+      "USER_260",
+      "USER_303",
+      "USER_418",
+      "USER_489",
+      "USER_668",
+      "USER_760",
+      "USER_788",
+      "USER_828"
+    ],
+    "ocean_means": {
+      "openness": 0.41454714251265246,
+      "conscientiousness": 0.6266375891901238,
+      "extraversion": 0.584416624589273,
+      "agreeableness": 0.5261223528450237,
+      "neuroticism": 0.29302229876539726
+    },
+    "demographic_means": {
+      "age": 39.888888888888886,
+      "income": 1799042.288208523,
+      "gender_distribution": {
+        "male": 0.7777777777777778,
+        "female": 0.0,
+        "other": 0.2222222222222222
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.4021917230018196,
+      "budget_sensitivity": 0.3331923547876367,
+      "distance_tolerance": 0.3456527136264751,
+      "rating_focus": 0.5864314946520838
+    }
+  },
+  "8": {
+    "cluster_id": 8,
+    "size": 109,
+    "percentage": 10.9,
+    "member_ids": [
+      "USER_002",
+      "USER_007",
+      "USER_012",
+      "USER_017",
+      "USER_032",
+      "USER_034",
+      "USER_040",
+      "USER_044",
+      "USER_045",
+      "USER_049"
+    ],
+    "ocean_means": {
+      "openness": 0.5484698341297818,
+      "conscientiousness": 0.49067194181736595,
+      "extraversion": 0.5107320237644942,
+      "agreeableness": 0.6239986800369078,
+      "neuroticism": 0.4478459368283845
+    },
+    "demographic_means": {
+      "age": 33.403669724770644,
+      "income": 879286.1411109729,
+      "gender_distribution": {
+        "male": 1.0,
+        "female": 0.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5367273013456375,
+      "budget_sensitivity": 0.47858699750550926,
+      "distance_tolerance": 0.28177940003613744,
+      "rating_focus": 0.5440026371051826
+    }
+  },
+  "9": {
+    "cluster_id": 9,
+    "size": 147,
+    "percentage": 14.7,
+    "member_ids": [
+      "USER_018",
+      "USER_023",
+      "USER_026",
+      "USER_031",
+      "USER_033",
+      "USER_039",
+      "USER_046",
+      "USER_047",
+      "USER_053",
+      "USER_057"
+    ],
+    "ocean_means": {
+      "openness": 0.6306707306324926,
+      "conscientiousness": 0.42706066666782666,
+      "extraversion": 0.536552753326943,
+      "agreeableness": 0.5011286977400619,
+      "neuroticism": 0.5052468272807256
+    },
+    "demographic_means": {
+      "age": 25.01360544217687,
+      "income": 404239.47459944163,
+      "gender_distribution": {
+        "male": 0.0,
+        "female": 1.0,
+        "other": 0.0
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.6133513114423969,
+      "budget_sensitivity": 0.5390930803064494,
+      "distance_tolerance": 0.2964917499384467,
+      "rating_focus": 0.45668787909672076
+    }
+  },
+  "10": {
+    "cluster_id": 10,
+    "size": 14,
+    "percentage": 1.4000000000000001,
+    "member_ids": [
+      "USER_024",
+      "USER_054",
+      "USER_131",
+      "USER_160",
+      "USER_338",
+      "USER_440",
+      "USER_704",
+      "USER_771",
+      "USER_776",
+      "USER_832"
+    ],
+    "ocean_means": {
+      "openness": 0.5890775476609574,
+      "conscientiousness": 0.46246877923493507,
+      "extraversion": 0.6091289662893943,
+      "agreeableness": 0.4599640545709352,
+      "neuroticism": 0.3480055744850188
+    },
+    "demographic_means": {
+      "age": 34.357142857142854,
+      "income": 850108.4354168706,
+      "gender_distribution": {
+        "male": 0.21428571428571427,
+        "female": 0.5,
+        "other": 0.2857142857142857
+      }
+    },
+    "behavioral_means": {
+      "novelty_seeking": 0.5736136495921896,
+      "budget_sensitivity": 0.4427683976250419,
+      "distance_tolerance": 0.3788912169603224,
+      "rating_focus": 0.46146688936933516
+    }
+  }
+}
