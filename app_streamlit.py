@@ -154,6 +154,47 @@ st.markdown("""
     background-color: #8fa61f !important;
     border-color: #8fa61f !important;
 }
+
+/* Override red sliders with neon green */
+.stSlider > div > div > div > div {
+    background-color: #C1E329 !important;
+}
+
+.stSlider > div > div > div > div > div {
+    background-color: #C1E329 !important;
+}
+
+.stSlider [role="slider"] {
+    background-color: #C1E329 !important;
+}
+
+.stSlider [data-baseweb="slider"] > div > div {
+    background-color: #C1E329 !important;
+}
+
+.stSlider [data-baseweb="slider"] [role="slider"] {
+    background-color: #C1E329 !important;
+    border: 2px solid #C1E329 !important;
+}
+
+/* Slider track (the filled part) */
+.stSlider [data-baseweb="slider"] > div:first-child > div:first-child {
+    background-color: #C1E329 !important;
+}
+
+/* Slider thumb */
+.stSlider [data-baseweb="slider"] [role="slider"]:focus {
+    box-shadow: 0 0 0 0.2rem rgba(193, 227, 41, 0.5) !important;
+}
+
+/* Override any other red accents */
+[data-testid="stMarkdownContainer"] a {
+    color: #3FB1F0 !important;
+}
+
+.stAlert a {
+    color: #3FB1F0 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
