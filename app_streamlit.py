@@ -144,15 +144,24 @@ st.markdown("""
     color: #000000 !important;
 }
 
+/* Force black text on primary buttons - higher specificity */
+.stButton > button[kind="primary"] p,
+.stButton > button[kind="primary"] span,
+.stButton > button[kind="primary"] div {
+    color: #000000 !important;
+}
+
 .stButton > button[kind="primary"]:hover {
     background-color: #a8c424 !important;
     border-color: #a8c424 !important;
     box-shadow: 0 0 20px rgba(193, 227, 41, 0.4) !important;
+    color: #000000 !important;
 }
 
 .stButton > button[kind="primary"]:active {
     background-color: #8fa61f !important;
     border-color: #8fa61f !important;
+    color: #000000 !important;
 }
 
 /* COMPLETE slider override - remove ALL red */
@@ -503,7 +512,8 @@ def render_clustering_controls():
         st.session_state.clustering_params["min_cluster_size"] = min_size
 
     with col4:
-        st.markdown("###")
+        # Add vertical spacing to align with sliders
+        st.markdown('<div style="height: 28px;"></div>', unsafe_allow_html=True)
         if st.button("🚀 Run Clustering", type="primary", use_container_width=True):
             st.markdown('</div>', unsafe_allow_html=True)
             return True
