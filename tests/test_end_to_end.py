@@ -92,7 +92,7 @@ def main():
     print("\n✓ .env file found")
 
     # Load user profile
-    user_profile_path = "data/twin_profiles/USER_001.json"
+    user_profile_path = "data/twin_profiles/user_001.json"
 
     if not Path(user_profile_path).exists():
         print(f"\n❌ ERROR: Profile not found at {user_profile_path}")

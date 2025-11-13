@@ -25,7 +25,7 @@ def generate_profile_with_llm(llm_client: LLMClient, user_id: str, seed: int) ->
 
     Args:
         llm_client: LLM client instance
-        user_id: User ID (e.g., "USER_011")
+        user_id: User ID (e.g., "user_011")
         seed: Random seed for reproducibility
 
     Returns:
@@ -254,13 +254,13 @@ def main():
         "--start_id",
         type=int,
         default=11,
-        help="Starting user ID number (default: 11 for USER_011)"
+        help="Starting user ID number (default: 11 for user_011)"
     )
     parser.add_argument(
         "--end_id",
         type=int,
         default=1000,
-        help="Ending user ID number (default: 1000 for USER_1000)"
+        help="Ending user ID number (default: 1000 for user_1000)"
     )
     parser.add_argument(
         "--seed",
@@ -292,7 +292,7 @@ def main():
     else:
         print(f"✓ LLM provider: {llm_client.provider} (model: {llm_client.model})")
 
-    print(f"\nGenerating user profiles from USER_{args.start_id:03d} to USER_{args.end_id:03d}...")
+    print(f"\nGenerating user profiles from user_{args.start_id:03d} to user_{args.end_id:03d}...")
     print(f"Output directory: {output_dir}")
     print(f"Total profiles to generate: {args.end_id - args.start_id + 1}")
     print("-" * 60)
@@ -302,7 +302,7 @@ def main():
     start_time = time.time()
 
     for user_num in range(args.start_id, args.end_id + 1):
-        user_id = f"USER_{user_num:03d}"
+        user_id = f"user_{user_num:03d}"
         profile_path = output_dir / f"{user_id}.json"
 
         # Skip if already exists

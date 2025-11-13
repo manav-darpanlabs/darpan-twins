@@ -56,7 +56,7 @@ def validate_profile_loading():
             return False
 
         # Count profiles
-        profiles = list(profiles_dir.glob("USER_*.json"))
+        profiles = list(profiles_dir.glob("user_*.json"))
         print(f"   ✓ Found {len(profiles)} user profiles")
 
         if len(profiles) == 0:
@@ -156,7 +156,7 @@ def validate_decision_pipeline():
         from twins.twin_runtime import TwinRuntime
 
         # Load a test profile
-        twin = TwinRuntime.from_profile_path("data/twin_profiles/USER_001.json")
+        twin = TwinRuntime.from_profile_path("data/twin_profiles/user_001.json")
 
         # Create simple test cards
         card_a = {

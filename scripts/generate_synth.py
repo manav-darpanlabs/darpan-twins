@@ -345,7 +345,7 @@ def load_profiles(profile_dir: str, user_range: str = None) -> List[UserProfile]
 
     Args:
         profile_dir: Directory containing user profile JSON files
-        user_range: Optional range filter in format "USER_001:USER_500" (inclusive)
+        user_range: Optional range filter in format "user_001:user_500" (inclusive)
 
     Returns:
         List of UserProfile objects
@@ -362,14 +362,14 @@ def load_profiles(profile_dir: str, user_range: str = None) -> List[UserProfile]
                 start_user = parts[0].strip()
                 end_user = parts[1].strip()
         except Exception:
-            print(f"Warning: Invalid user_range format '{user_range}'. Expected format: 'USER_001:USER_500'")
+            print(f"Warning: Invalid user_range format '{user_range}'. Expected format: 'user_001:user_500'")
 
     if os.path.isdir(profile_dir):
         for fname in sorted(os.listdir(profile_dir)):
             if not fname.endswith(".json"):
                 continue
 
-            # Extract user_id from filename (e.g., "USER_001.json" -> "USER_001")
+            # Extract user_id from filename (e.g., "user_001.json" -> "user_001")
             user_id = os.path.splitext(fname)[0]
 
             # Filter by user_range if specified
@@ -387,7 +387,7 @@ def load_profiles(profile_dir: str, user_range: str = None) -> List[UserProfile]
         print("Warning: No profiles loaded. Using default profile.")
         profiles = [
             UserProfile(
-                user_id="USER_DEFAULT",
+                user_id="user_DEFAULT",
                 openness=0.55,
                 conscientiousness=0.55,
                 extraversion=0.5,
@@ -412,7 +412,7 @@ def run(output_path: str, interactions_per_user: int, seed: int, profile_dir: st
         interactions_per_user: Number of interactions to generate per user
         seed: Random seed for reproducibility
         profile_dir: Directory containing user profile JSON files
-        user_range: Optional range filter in format "USER_001:USER_500"
+        user_range: Optional range filter in format "user_001:user_500"
 
     Returns:
         DataFrame with generated interaction data
@@ -473,7 +473,7 @@ def main() -> None:
     parser.add_argument("--profile_dir", type=str, default="data/twin_profiles", help="Directory containing user profile JSONs")
     parser.add_argument("--interactions_per_user", type=int, default=400, help="Number of interactions per user")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
-    parser.add_argument("--user_range", type=str, default=None, help="User range filter (e.g., 'USER_001:USER_500')")
+    parser.add_argument("--user_range", type=str, default=None, help="User range filter (e.g., 'user_001:user_500')")
 
     args = parser.parse_args()
     run(

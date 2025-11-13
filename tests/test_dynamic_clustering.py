@@ -180,7 +180,7 @@ def test_get_twins_by_cluster():
 
     assert len(twins) >= 50, f"Cluster {cluster_id} has fewer than 50 twins"
     assert all(isinstance(twin, str) for twin in twins), "All twins should be strings"
-    assert all(twin.startswith("USER_") for twin in twins), "All twins should start with USER_"
+    assert all(twin.startswith("user_") for twin in twins), "All twins should start with user_"
 
     print(f"  ✅ Twin retrieval working correctly")
     return True

@@ -91,7 +91,7 @@ def test_openness_alignment(n: int = 20, verbose: bool = False) -> None:
     print(f"Testing {n} users...\n")
 
     for i in range(1, n + 1):
-        user_id = f"USER_{i:03d}"
+        user_id = f"user_{i:03d}"
         profile_path = f"data/twin_profiles/{user_id}.json"
 
         try:

@@ -22,7 +22,7 @@ def test_pipeline_structure():
     print("=" * 60)
 
     # Load a test user
-    user_profile_path = "data/twin_profiles/USER_001.json"
+    user_profile_path = "data/twin_profiles/user_001.json"
 
     if not Path(user_profile_path).exists():
         print(f"✗ Error: Profile not found at {user_profile_path}")

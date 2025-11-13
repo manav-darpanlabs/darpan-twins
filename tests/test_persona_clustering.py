@@ -25,7 +25,7 @@ def test_clustering_coverage():
 
     # Load all profile files
     profiles_dir = Path("data/twin_profiles")
-    profile_files = list(profiles_dir.glob("USER_*.json"))
+    profile_files = list(profiles_dir.glob("user_*.json"))
 
     print(f"  Total profile files: {len(profile_files)}")
     print(f"  Total assignments: {len(assignments)}")
@@ -150,7 +150,7 @@ def test_profile_updates():
     print("\n🧪 Testing Profile Updates...")
 
     profiles_dir = Path("data/twin_profiles")
-    sample_files = list(profiles_dir.glob("USER_*.json"))[:10]  # Check first 10
+    sample_files = list(profiles_dir.glob("user_*.json"))[:10]  # Check first 10
 
     profiles_with_persona = 0
     profiles_missing_persona = []

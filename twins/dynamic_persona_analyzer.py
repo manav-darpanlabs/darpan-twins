@@ -53,7 +53,7 @@ class DynamicPersonaAnalyzer:
         profiles = {}
         profiles_path = Path(self.profiles_dir)
 
-        for profile_file in sorted(profiles_path.glob("USER_*.json")):
+        for profile_file in sorted(profiles_path.glob("user_*.json")):
             with open(profile_file, 'r') as f:
                 profile = json.load(f)
                 profiles[profile['user_id']] = profile

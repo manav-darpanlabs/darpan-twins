@@ -49,7 +49,7 @@ def test_aggregate_results():
     # Mock data simulating run_dual_llm_for_users output
     mock_results = [
         {
-            "user_id": "USER_001",
+            "user_id": "user_001",
             "name": "Alice",
             "action": "A",
             "reasons": ["higher average rating (4.3 vs 3.9)", "faster delivery time"],
@@ -59,7 +59,7 @@ def test_aggregate_results():
             "likert": 4,
         },
         {
-            "user_id": "USER_002",
+            "user_id": "user_002",
             "name": "Bob",
             "action": "A",
             "reasons": ["more reviews indicates trust", "higher rating"],
@@ -69,7 +69,7 @@ def test_aggregate_results():
             "likert": 5,
         },
         {
-            "user_id": "USER_003",
+            "user_id": "user_003",
             "name": "Carol",
             "action": "B",
             "reasons": ["lower price makes it more affordable", "coupon available"],
@@ -79,7 +79,7 @@ def test_aggregate_results():
             "likert": 4,
         },
         {
-            "user_id": "USER_004",
+            "user_id": "user_004",
             "name": "David",
             "action": "tie",
             "reasons": [],

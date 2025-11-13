@@ -17,7 +17,7 @@ from collections import Counter
 import argparse
 
 
-def test_consistency(user_id: str = "USER_001", n: int = 10) -> None:
+def test_consistency(user_id: str = "user_001", n: int = 10) -> None:
     """
     Test consistency of LLM decision-making.
 
@@ -152,8 +152,8 @@ def main():
     parser.add_argument(
         "--user_id",
         type=str,
-        default="USER_001",
-        help="User profile ID to test (default: USER_001)"
+        default="user_001",
+        help="User profile ID to test (default: user_001)"
     )
     parser.add_argument(
         "--runs",
