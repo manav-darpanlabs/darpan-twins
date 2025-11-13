@@ -227,6 +227,48 @@ div[data-testid="stException"] {
     color: #C1E329 !important;
     fill: #C1E329 !important;
 }
+
+/* Override ALL Streamlit label colors - remove red text */
+label, .stSelectbox label, .stSlider label, .stNumberInput label,
+.stTextInput label, .stTextArea label, .stCheckbox label,
+.stRadio label, .stMultiSelect label, .stDateInput label,
+.stTimeInput label, .stFileUploader label {
+    color: #ffffff !important;
+}
+
+/* Override widget label text */
+[data-testid="stWidgetLabel"] {
+    color: #ffffff !important;
+}
+
+[data-testid="stWidgetLabel"] p {
+    color: #ffffff !important;
+}
+
+/* Override form labels */
+[data-testid="stFormLabel"] {
+    color: #ffffff !important;
+}
+
+/* Override selectbox and dropdown text */
+.stSelectbox > div > div {
+    color: #ffffff !important;
+}
+
+/* Override any remaining red text in the app */
+.element-container {
+    color: #ffffff !important;
+}
+
+/* Make sure slider labels are white */
+.stSlider label {
+    color: #ffffff !important;
+}
+
+/* Override the help text color */
+[data-testid="stTooltipHoverTarget"] {
+    color: #888888 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
