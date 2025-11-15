@@ -44,6 +44,7 @@ class DynamicPersonaAnalyzer:
         self.current_model = None
         self.current_labels = None
         self.current_params = {}
+        self.precomputed_assignments = None
 
         # Load profiles on initialization
         self.load_profiles()
@@ -60,6 +61,43 @@ class DynamicPersonaAnalyzer:
 
         self.profiles = profiles
         return profiles
+
+    def load_precomputed_assignments(self, filepath: str) -> Dict[str, Dict]:
+        """
+        Load pre-computed persona assignments from a JSON file.
+
+        This allows using pre-computed persona assignments without
+        re-running the clustering algorithm.
+
+        Args:
+            filepath: Path to the persona assignments JSON file
+
+        Returns:
+            Dictionary mapping user_id to assignment data
+
+        Raises:
+            FileNotFoundError: If the assignments file doesn't exist
+        """
+        if not os.path.exists(filepath):
+            raise FileNotFoundError(f"Assignments file not found: {filepath}")
+
+        with open(filepath, 'r') as f:
+            assignments_raw = json.load(f)
+
+        assignments = {}
+        for user_id, assignment_data in assignments_raw.items():
+            cluster_id = assignment_data.get('cluster_id')
+
+            if isinstance(cluster_id, str):
+                cluster_id = int(cluster_id)
+
+            assignments[user_id] = {
+                'cluster_id': cluster_id,
+                'probabilities': assignment_data.get('probabilities', [])
+            }
+
+        self.precomputed_assignments = assignments
+        return assignments
 
     def extract_features(self) -> pd.DataFrame:
         """Extract features from profiles for clustering."""
@@ -351,12 +389,37 @@ class DynamicPersonaAnalyzer:
         return self.umap_embedding
 
     def get_twins_by_cluster(self, cluster_id: int) -> List[str]:
-        """Get list of twin IDs in a specific cluster."""
-        if self.current_labels is None:
-            raise ValueError("No clustering performed yet")
+        """
+        Get list of twin IDs in a specific cluster.
 
-        mask = self.current_labels == cluster_id
-        return self.features_df.index[mask].tolist()
+        Uses dynamic clustering results if available, otherwise falls back
+        to pre-computed assignments if loaded.
+
+        Args:
+            cluster_id: The cluster ID to get twins for
+
+        Returns:
+            List of twin user IDs in the specified cluster
+
+        Raises:
+            ValueError: If neither clustering nor precomputed assignments exist
+        """
+        if self.current_labels is not None:
+            mask = self.current_labels == cluster_id
+            return self.features_df.index[mask].tolist()
+
+        if self.precomputed_assignments is not None:
+            twins = [
+                user_id
+                for user_id, assignment in self.precomputed_assignments.items()
+                if assignment['cluster_id'] == cluster_id
+            ]
+            return twins
+
+        raise ValueError(
+            "No clustering performed yet and no precomputed assignments loaded. "
+            "Either run clustering or load precomputed assignments first."
+        )
 
     def get_cluster_summary(self) -> pd.DataFrame:
         """Get a summary dataframe of all clusters."""

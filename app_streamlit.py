@@ -303,6 +303,81 @@ label, .stSelectbox label, .stSlider label, .stNumberInput label,
     color: #888888 !important;
 }
 
+/* Hide Streamlit's screen reader / accessibility text that sometimes renders visibly */
+.st-emotion-cache-16idsys p,
+[data-testid="stMarkdownContainer"] > p:empty,
+.element-container > div > div > div > p:empty {
+    display: none !important;
+}
+
+/* Hide any visually displayed screen reader text */
+.sr-only, [class*="screenreader"], [class*="visuallyhidden"] {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Fix Streamlit selectbox label overflow issues */
+.stSelectbox > label > div {
+    overflow: hidden !important;
+}
+
+/* Hide any stray text above form elements */
+.stSelectbox > div:first-child > div:first-child > p:not([data-testid="stWidgetLabel"] p) {
+    display: none !important;
+}
+
+/* Ensure proper spacing and hide overflow text in selectbox containers */
+[data-baseweb="select"] {
+    margin-top: 0 !important;
+}
+
+/* Hide Streamlit's internal accessibility/keyboard shortcut text */
+[data-testid="stExpander"] p[class*="emotion"] {
+    line-height: normal !important;
+}
+
+/* Aggressive fix: hide any paragraph elements that might contain spurious text in expanders */
+[data-testid="stExpander"] > details > summary ~ div p:empty,
+[data-testid="stExpander"] > details > summary ~ div > div > p:empty {
+    display: none !important;
+}
+
+/* Fix for stray text appearing above widgets */
+.element-container:has(.stSelectbox) > div:first-child > p:not([data-testid="stWidgetLabel"]),
+.element-container:has(.stSlider) > div:first-child > p:not([data-testid="stWidgetLabel"]) {
+    display: none !important;
+}
+
+/* NUCLEAR OPTION: Hide all small/empty paragraphs that might be accessibility text */
+.element-container p:empty,
+.stMarkdown p:empty,
+div[data-testid="column"] > div > div > p:empty {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Hide Streamlit's keyboard shortcut text that sometimes appears */
+[class*="StyledShortcutLabel"],
+[class*="shortcut"],
+p[class*="emotion"]:not([data-testid]):empty {
+    display: none !important;
+}
+
+/* Additional fix for any text nodes that appear before selectbox */
+[data-baseweb="select"]::before {
+    content: none !important;
+    display: none !important;
+}
+
 /* === COMPREHENSIVE RED TEXT ELIMINATION === */
 
 /* 1. ALL HEADINGS - Force white text */
@@ -518,6 +593,9 @@ def render_compact_persona_card(cluster_id, persona, is_selected):
 
 def render_clustering_controls():
     """Render dynamic clustering control panel"""
+    # Add small spacer to prevent overlap with any stray text above
+    st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
+
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
@@ -818,6 +896,10 @@ def main():
                 with open("data/persona_definitions.json", 'r') as f:
                     personas = json.load(f)
 
+                # Load precomputed assignments so twins can be retrieved
+                if st.session_state.analyzer.precomputed_assignments is None:
+                    st.session_state.analyzer.load_precomputed_assignments("data/persona_assignments.json")
+
                 st.markdown("### 📚 pre-computed personas")
 
                 # Persona filters
@@ -1008,18 +1090,26 @@ def main():
                     with st.spinner("running experiment on selected personas..."):
                         # Get twins from selected personas
                         selected_twins = []
+                        errors = []
+
                         for cluster_id in st.session_state.selected_personas:
                             try:
                                 cluster_twins = st.session_state.analyzer.get_twins_by_cluster(int(cluster_id))
                                 selected_twins.extend(cluster_twins[:10])
-                            except:
-                                pass
+                            except ValueError as e:
+                                errors.append(f"Cluster {cluster_id}: {str(e)}")
+                            except Exception as e:
+                                errors.append(f"Cluster {cluster_id}: Unexpected error - {str(e)}")
 
                         if selected_twins:
                             st.success(f"✅ running experiment on {len(selected_twins)} twins from {len(st.session_state.selected_personas)} personas")
                             st.info("💡 experiment functionality ready - integrate with actual llm calls")
                         else:
                             st.warning("no twins found for selected personas")
+                            if errors:
+                                st.error("Errors occurred while loading twins:")
+                                for error in errors:
+                                    st.error(f"• {error}")
 
     with tab3:  # Analytics Tab
         st.markdown("## 📊 persona analytics")

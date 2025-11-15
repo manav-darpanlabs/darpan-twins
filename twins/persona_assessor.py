@@ -157,7 +157,13 @@ Analyze this data holistically and generate a persona profile in the following J
   "description": "A rich 2-3 sentence narrative describing this persona's relationship with food delivery. Connect their personality, demographics, and behaviors into a cohesive story.",
   "motivations": "2-3 key drivers that motivate their food delivery choices",
   "pain_points": "2-3 main frustrations or challenges they face with food delivery",
-  "preferences": "2-3 specific preferences for how they like to order food"
+  "preferences": "2-3 specific preferences for how they like to order food",
+  "tags": {{
+    "price_sensitivity": "ONE of: budget-conscious | value-seeker | premium-willing | price-insensitive",
+    "exploration": "ONE of: adventurous | selective-explorer | routine-preferrer | strictly-familiar",
+    "decision_style": "ONE of: quick-decider | research-driven | socially-influenced | impulse-driven",
+    "order_frequency": "ONE of: daily-user | weekly-regular | occasional | rare"
+  }}
 }}
 
 ## GUIDELINES: Think like a PM
@@ -191,6 +197,13 @@ Analyze this data holistically and generate a persona profile in the following J
    - Tagline: ONE sentence that makes the team go "oh, I know exactly who that is!"
    - Description: 2-3 sentences max, but pack them with behavioral insights
 
+7. **MECE Tags**: Assign exactly ONE tag per dimension (mutually exclusive, collectively exhaustive)
+   - price_sensitivity: Based on budget_sensitivity score and income
+   - exploration: Based on novelty_seeking and openness scores
+   - decision_style: Based on conscientiousness, rating_focus, and neuroticism
+   - order_frequency: Infer from behavioral patterns and demographics
+   - These enable filtering personas by key characteristics
+
 Return ONLY the JSON object, no other text."""
 
         return prompt
@@ -213,8 +226,11 @@ Return ONLY the JSON object, no other text."""
                 assessment = json.loads(json_str)
 
                 # Validate required fields
-                required_fields = ['name', 'tagline', 'description', 'motivations', 'pain_points', 'preferences']
+                required_fields = ['name', 'tagline', 'description', 'motivations', 'pain_points', 'preferences', 'tags']
                 if all(field in assessment for field in required_fields):
+                    # Ensure tags has default values if missing keys
+                    if 'tags' not in assessment or not isinstance(assessment['tags'], dict):
+                        assessment['tags'] = {}
                     return assessment
 
         except json.JSONDecodeError:
@@ -292,13 +308,22 @@ Return ONLY the JSON object, no other text."""
         else:
             name = f"persona {cluster_id}"
 
+        # Rule-based tag assignment
+        tags = {
+            'price_sensitivity': 'value-seeker' if behavioral.get('budget_sensitivity', 0) > 0.5 else 'budget-conscious' if behavioral.get('budget_sensitivity', 0) > 0.7 else 'premium-willing',
+            'exploration': 'adventurous' if behavioral.get('novelty_seeking', 0) > 0.6 else 'selective-explorer' if behavioral.get('novelty_seeking', 0) > 0.4 else 'routine-preferrer',
+            'decision_style': 'research-driven' if behavioral.get('rating_focus', 0) > 0.6 else 'quick-decider',
+            'order_frequency': 'weekly-regular'
+        }
+
         return {
             'name': name,
             'tagline': f"cluster with {size} users ({percentage:.1f}% of total)",
             'description': f"a distinct customer segment representing {percentage:.1f}% of the user base.",
             'motivations': "convenient food delivery",
             'pain_points': "service quality issues",
-            'preferences': "reliable delivery"
+            'preferences': "reliable delivery",
+            'tags': tags
         }
 
     def assess_all_personas(
