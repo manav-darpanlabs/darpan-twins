@@ -1,0 +1,37 @@
+# Pre-commit hooks for security and code quality
+# Install: pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-yaml
+      - id: check-json
+      - id: detect-private-key
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+
+  # Detect secrets in code
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args:
+          - '--baseline'
+          - '.secrets.baseline'
+          - '--exclude-files'
+          - '.*\.json$|.*\.ipynb$|.*\.csv$|.*\.npy$'
+        exclude: |
+          (?x)^(
+            .*\.json$|
+            .*\.ipynb$|
+            data/.*|
+            .secrets.baseline$|
+            package-lock.json$
+          )

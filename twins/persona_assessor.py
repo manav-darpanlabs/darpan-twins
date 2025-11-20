@@ -215,6 +215,9 @@ Return ONLY the JSON object, no other text."""
         Attempts to extract JSON from the response. Falls back to parsing
         if JSON extraction fails.
         """
+        if not response_text or not isinstance(response_text, str):
+            return self._parse_fallback(response_text)
+
         try:
             # Try to extract JSON from the response
             # Handle both cases: pure JSON and JSON wrapped in text

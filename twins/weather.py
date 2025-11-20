@@ -23,8 +23,9 @@ def fetch_current_weather(latitude: float, longitude: float) -> Dict[str, Any]:
     params = {
         "latitude": latitude,
         "longitude": longitude,
-        "current": "temperature_2m,precipitation",
+        "hourly": "temperature_2m,precipitation",
         "timezone": "auto",
+        "forecast_days": 1,
     }
 
     # Try twice in case of transient failure
@@ -33,18 +34,28 @@ def fetch_current_weather(latitude: float, longitude: float) -> Dict[str, Any]:
             r = requests.get(url, params=params, timeout=10)
             r.raise_for_status()
             data = r.json() or {}
-            current = data.get("current", {}) or {}
+            hourly = data.get("hourly", {}) or {}
 
             # Validate we actually got data
-            if not current:
+            if not hourly or "time" not in hourly or not hourly["time"]:
                 continue
 
-            temp = float(current.get("temperature_2m", 0.0))
-            precip = float(current.get("precipitation", 0.0))
+            # Find the current hour's index
+            now = datetime.now(pytz.timezone(data.get("timezone", "UTC")))
+            current_hour_str = now.strftime("%Y-%m-%dT%H:00")
+
+            try:
+                idx = hourly["time"].index(current_hour_str)
+            except ValueError:
+                # If current hour not found, use the first available hour
+                idx = 0
+
+            temp = float(hourly["temperature_2m"][idx])
+            precip = float(hourly["precipitation"][idx])
 
             # If temp is exactly 0.0, it might be an API issue or actual temperature
             # We'll include an 'error' flag if data seems invalid
-            time_str = current.get("time")
+            time_str = hourly["time"][idx]
             hour = None
             is_weekend = None
             try:
@@ -86,5 +97,3 @@ def fetch_current_weather(latitude: float, longitude: float) -> Dict[str, Any]:
         "error": True,
         "error_message": "Weather API unavailable after retries",
     }
-
-
