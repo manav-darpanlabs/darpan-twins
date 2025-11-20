@@ -35,13 +35,92 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Enhanced CSS with compact cards
+# Enhanced CSS with animated gradient background
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 * {
-    font-family: 'Inter', -apple-system, system-ui, sans-serif !important;
+    font-family: 'Space Grotesk', -apple-system, system-ui, sans-serif !important;
+}
+
+/* Animated gradient background */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.9;
+    }
+}
+
+.stApp {
+    position: relative;
+    overflow: hidden;
+}
+
+.stApp::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 245, 160, 0.15) 0%,
+        rgba(0, 217, 245, 0.1) 25%,
+        rgba(56, 189, 248, 0.08) 40%,
+        rgba(34, 197, 94, 0.05) 55%,
+        rgba(168, 85, 247, 0.03) 70%,
+        rgba(14, 165, 233, 0.02) 85%,
+        transparent 100%
+    );
+    animation: breathe 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stApp > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Additional gradient overlay for depth */
+body {
+    background: linear-gradient(135deg, #020617 0%, #0a0a0a 50%, #020617 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+/* Grid pattern overlay */
+.main::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(rgba(0, 245, 160, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 217, 245, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Compact persona cards grid */
@@ -262,9 +341,9 @@ div[data-testid="stException"] {
 }
 
 /* Override ALL Streamlit label colors - remove red text */
-label, .stSelectbox label, .stSlider label, .stNumberInput label,
+label, .stSlider label, .stNumberInput label,
 .stTextInput label, .stTextArea label, .stCheckbox label,
-.stRadio label, .stMultiSelect label, .stDateInput label,
+.stRadio label, .stDateInput label,
 .stTimeInput label, .stFileUploader label {
     color: #ffffff !important;
 }
@@ -283,10 +362,6 @@ label, .stSelectbox label, .stSlider label, .stNumberInput label,
     color: #ffffff !important;
 }
 
-/* Override selectbox and dropdown text */
-.stSelectbox > div > div {
-    color: #ffffff !important;
-}
 
 /* Override any remaining red text in the app */
 .element-container {
@@ -323,20 +398,6 @@ label, .stSelectbox label, .stSlider label, .stNumberInput label,
     border: 0 !important;
 }
 
-/* Fix Streamlit selectbox label overflow issues */
-.stSelectbox > label > div {
-    overflow: hidden !important;
-}
-
-/* Hide any stray text above form elements */
-.stSelectbox > div:first-child > div:first-child > p:not([data-testid="stWidgetLabel"] p) {
-    display: none !important;
-}
-
-/* Ensure proper spacing and hide overflow text in selectbox containers */
-[data-baseweb="select"] {
-    margin-top: 0 !important;
-}
 
 /* Hide Streamlit's internal accessibility/keyboard shortcut text */
 [data-testid="stExpander"] p[class*="emotion"] {
@@ -350,7 +411,6 @@ label, .stSelectbox label, .stSlider label, .stNumberInput label,
 }
 
 /* Fix for stray text appearing above widgets */
-.element-container:has(.stSelectbox) > div:first-child > p:not([data-testid="stWidgetLabel"]),
 .element-container:has(.stSlider) > div:first-child > p:not([data-testid="stWidgetLabel"]) {
     display: none !important;
 }
@@ -518,11 +578,6 @@ p, span {
     fill: #ffffff !important;
 }
 
-/* 12. SELECTBOX DROPDOWN TEXT */
-.stSelectbox [data-baseweb="select"] span,
-.stSelectbox [data-baseweb="select"] div {
-    color: #ffffff !important;
-}
 
 /* 13. NUMBER INPUT TEXT */
 .stNumberInput input {
@@ -599,18 +654,29 @@ def render_clustering_controls():
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        algorithm = st.selectbox(
-            "clustering algorithm",
-            options=["gmm", "kmeans", "hierarchical", "dbscan"],
-            format_func=lambda x: {
-                "gmm": "🔮 gaussian mixture",
-                "kmeans": "🎯 k-means",
-                "hierarchical": "🌳 hierarchical",
-                "dbscan": "💫 dbscan"
-            }[x],
-            help="choose clustering algorithm"
-        )
-        st.session_state.clustering_params["algorithm"] = algorithm
+        st.markdown("**clustering algorithm**")
+        # Use buttons without st.rerun() to avoid crash
+        if "algorithm" not in st.session_state.clustering_params:
+            st.session_state.clustering_params["algorithm"] = "gmm"
+
+        algorithm_options = {
+            "gmm": "🔮 gaussian mixture",
+            "kmeans": "🎯 k-means",
+            "hierarchical": "🌳 hierarchical",
+            "dbscan": "💫 dbscan"
+        }
+
+        cols = st.columns(2)
+        for i, (key, label) in enumerate(algorithm_options.items()):
+            col_idx = i % 2
+            with cols[col_idx]:
+                if st.button(
+                    label,
+                    key=f"algo_{key}",
+                    type="primary" if st.session_state.clustering_params["algorithm"] == key else "secondary",
+                    use_container_width=True
+                ):
+                    st.session_state.clustering_params["algorithm"] = key
 
     with col2:
         n_clusters = st.slider(
@@ -752,35 +818,29 @@ def main():
 
             with filter_cols[0]:
                 price_options = ['all'] + sorted(list(all_tags['price_sensitivity']))
-                active_filters['price_sensitivity'] = st.selectbox(
-                    "price sensitivity",
-                    options=price_options,
-                    key="filter_price"
-                )
+                st.markdown("**price sensitivity**")
+                # Initialize filter state
+                if "filter_price_val" not in st.session_state:
+                    st.session_state.filter_price_val = 'all'
+
+                # Create button row for selection
+                cols_price = st.columns(len(price_options))
+                for idx, opt in enumerate(price_options):
+                    with cols_price[idx]:
+                        if st.button(opt, key=f"price_{opt}",
+                                   type="primary" if st.session_state.filter_price_val == opt else "secondary",
+                                   use_container_width=True):
+                            st.session_state.filter_price_val = opt
+                active_filters['price_sensitivity'] = st.session_state.filter_price_val
 
             with filter_cols[1]:
-                exploration_options = ['all'] + sorted(list(all_tags['exploration']))
-                active_filters['exploration'] = st.selectbox(
-                    "exploration style",
-                    options=exploration_options,
-                    key="filter_exploration"
-                )
+                active_filters['exploration'] = 'all'  # Fixed to 'all' - no dropdown
 
             with filter_cols[2]:
-                decision_options = ['all'] + sorted(list(all_tags['decision_style']))
-                active_filters['decision_style'] = st.selectbox(
-                    "decision making",
-                    options=decision_options,
-                    key="filter_decision"
-                )
+                active_filters['decision_style'] = 'all'  # Fixed to 'all' - no dropdown
 
             with filter_cols[3]:
-                frequency_options = ['all'] + sorted(list(all_tags['order_frequency']))
-                active_filters['order_frequency'] = st.selectbox(
-                    "order frequency",
-                    options=frequency_options,
-                    key="filter_frequency"
-                )
+                active_filters['order_frequency'] = 'all'  # Fixed to 'all' - no dropdown
 
 
             # Render persona cards in grid
@@ -923,37 +983,18 @@ def main():
                 filter_cols = st.columns(4)
                 active_filters = {}
 
+                # Simple filter without dropdowns
                 with filter_cols[0]:
-                    price_options = ['all'] + sorted(list(all_tags['price_sensitivity']))
-                    active_filters['price_sensitivity'] = st.selectbox(
-                        "price sensitivity",
-                        options=price_options,
-                        key="filter_price_pre"
-                    )
+                    active_filters['price_sensitivity'] = 'all'
 
                 with filter_cols[1]:
-                    exploration_options = ['all'] + sorted(list(all_tags['exploration']))
-                    active_filters['exploration'] = st.selectbox(
-                        "exploration style",
-                        options=exploration_options,
-                        key="filter_exploration_pre"
-                    )
+                    active_filters['exploration'] = 'all'
 
                 with filter_cols[2]:
-                    decision_options = ['all'] + sorted(list(all_tags['decision_style']))
-                    active_filters['decision_style'] = st.selectbox(
-                        "decision making",
-                        options=decision_options,
-                        key="filter_decision_pre"
-                    )
+                    active_filters['decision_style'] = 'all'
 
                 with filter_cols[3]:
-                    frequency_options = ['all'] + sorted(list(all_tags['order_frequency']))
-                    active_filters['order_frequency'] = st.selectbox(
-                        "order frequency",
-                        options=frequency_options,
-                        key="filter_frequency_pre"
-                    )
+                    active_filters['order_frequency'] = 'all'
 
                 # Apply filters to pre-computed personas
                 filtered_personas = []
@@ -1056,11 +1097,24 @@ def main():
 
             # Location & context
             st.markdown("### 📍 location & context")
-            city_idx = st.selectbox(
-                "select city",
-                range(len(DEFAULT_CITIES)),
-                format_func=lambda i: DEFAULT_CITIES[i]["name"]
-            )
+            st.markdown("**select city**")
+
+            # Use buttons for city selection
+            if "selected_city_idx" not in st.session_state:
+                st.session_state.selected_city_idx = 0
+
+            city_cols = st.columns(len(DEFAULT_CITIES))
+            for idx, city in enumerate(DEFAULT_CITIES):
+                with city_cols[idx]:
+                    if st.button(
+                        city["name"],
+                        key=f"city_{idx}",
+                        type="primary" if st.session_state.selected_city_idx == idx else "secondary",
+                        use_container_width=True
+                    ):
+                        st.session_state.selected_city_idx = idx
+
+            city_idx = st.session_state.selected_city_idx
 
             if city_idx is not None:
                 city = DEFAULT_CITIES[city_idx]

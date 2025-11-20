@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import type { ExperimentResult } from '../lib/types'
 import WinBar from '../components/WinBar'
 import TopReasons from '../components/TopReasons'
@@ -6,6 +7,7 @@ import SegmentsTabs from '../components/SegmentsTabs'
 import EvidenceTrace from '../components/EvidenceTrace'
 import { copyMarkdownSummary } from '../lib/summary'
 import DriverCards from '../components/DriverCards'
+import AnimatedGradientBackground from '@/components/AnimatedGradientBackground'
 
 export default function ResultsView() {
   const [data, setData] = useState<ExperimentResult | null>(null)
@@ -14,10 +16,41 @@ export default function ResultsView() {
     fetch('/mock/result.json').then(r=>r.json()).then(setData)
   }, [])
 
-  if (!data) return <main className="max-w-6xl mx-auto p-6">Loading…</main>
+  if (!data) {
+    return (
+      <div className="relative min-h-screen">
+        <AnimatedGradientBackground
+          breathing={true}
+          startingGap={120}
+          breathingRange={30}
+          animationSpeed={0.003}
+        />
+        <main className="relative z-10 max-w-6xl mx-auto p-6">Loading…</main>
+      </div>
+    )
+  }
+
+  // Dynamic gradient colors based on results
+  const winnerColors = data.aggregate.A > data.aggregate.B
+    ? ["#020617", "#C1E329", "#22C55E", "#00F5A0", "#1a1d23", "#38BDF8", "#0a0a0a"]  // Green-dominant for A
+    : ["#020617", "#3fb1f0", "#00D9F5", "#0EA5E9", "#1a1d23", "#A855F7", "#0a0a0a"]  // Blue-dominant for B
 
   return (
-    <main className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className="relative min-h-screen">
+      <AnimatedGradientBackground
+        breathing={true}
+        startingGap={130}
+        breathingRange={10}
+        animationSpeed={0.0015}
+        gradientColors={winnerColors}
+        gradientStops={[10, 25, 40, 55, 70, 85, 100]}
+      />
+
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 max-w-6xl mx-auto p-6 space-y-6">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Experiment Results</h1>
@@ -75,8 +108,7 @@ export default function ResultsView() {
           </table>
         </div>
       </section>
-    </main>
+    </motion.main>
+    </div>
   )
 }
-
-

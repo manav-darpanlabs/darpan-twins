@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useMemo, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import AnimatedGradientBackground from '@/components/AnimatedGradientBackground'
 
 export default function ExperimentForm() {
   const nav = useNavigate()
@@ -17,7 +19,30 @@ export default function ExperimentForm() {
   }
 
   return (
-    <main className="max-w-6xl mx-auto p-6 space-y-6">
+    <div className="relative min-h-screen">
+      {/* Animated gradient background with subtle settings */}
+      <AnimatedGradientBackground
+        breathing={true}
+        startingGap={150}
+        breathingRange={15}
+        animationSpeed={0.001}
+        gradientColors={[
+          "#020617",   // Deep base
+          "#00F5A0",   // Neon green
+          "#00D9F5",   // Neon cyan
+          "#1a1d23",   // Panel color blend
+          "#22C55E",   // Vivid green
+          "#3fb1f0",   // Brand blue
+          "#0a0a0a"    // Deep black
+        ]}
+        gradientStops={[20, 35, 50, 65, 75, 85, 100]}
+      />
+
+      <motion.main
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="relative z-10 max-w-6xl mx-auto p-6 space-y-6">
       <section className="space-y-1">
         <h1 className="text-3xl font-bold">Create an experiment</h1>
         <p className="text-gray-300 max-w-2xl">Select the city, upload two restaurant cards, and specify context. We’ll ask your customer twins to choose A or B and explain why.</p>
@@ -50,8 +75,7 @@ export default function ExperimentForm() {
       <div className="flex justify-end">
         <button className={`btn ${ready? 'btn-primary':'opacity-50 cursor-not-allowed btn-primary'}`} onClick={start} disabled={!ready}>Start experiment</button>
       </div>
-    </main>
+    </motion.main>
+    </div>
   )
 }
-
-
