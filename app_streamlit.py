@@ -521,23 +521,6 @@ h1, h2, h3, h4, h5, h6 {
     accent-color: #C1E329 !important;
 }
 
-/* Position checkbox in top-right corner within persona-card-container */
-.persona-card-container .stCheckbox[data-testid="stCheckbox"] {
-    position: absolute !important;
-    top: 1rem !important;
-    right: 1rem !important;
-    margin: 0 !important;
-    z-index: 10 !important;
-}
-
-/* Ensure checkbox container within card doesn't take up space */
-.persona-card-container .stCheckbox {
-    position: absolute !important;
-    top: 1rem !important;
-    right: 1rem !important;
-    margin: 0 !important;
-}
-
 /* 7. FILE UPLOADER TEXT */
 [data-testid="stFileUploader"] label,
 [data-testid="stFileUploader"] p,
@@ -898,22 +881,11 @@ def main():
                             "tags": assessment.get('tags', {})
                         }
 
-                        # Wrap card and checkbox in container for positioning
+                        # Wrap card in container
                         st.markdown('<div class="persona-card-container">', unsafe_allow_html=True)
 
                         st.markdown(render_compact_persona_card(cluster_id, persona_data, is_selected),
                                   unsafe_allow_html=True)
-
-                        # Checkbox positioned in top-right corner
-                        if st.checkbox(f"select persona {cluster_id}",
-                                     key=f"sel_{cluster_id}",
-                                     value=is_selected,
-                                     label_visibility="collapsed"):
-                            if cluster_id not in st.session_state.selected_personas:
-                                st.session_state.selected_personas.append(cluster_id)
-                        else:
-                            if cluster_id in st.session_state.selected_personas:
-                                st.session_state.selected_personas.remove(cluster_id)
 
                         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1029,22 +1001,11 @@ def main():
                         with cols[j]:
                             is_selected = cluster_id in st.session_state.selected_personas
 
-                            # Wrap card and checkbox in container for positioning
+                            # Wrap card in container
                             st.markdown('<div class="persona-card-container">', unsafe_allow_html=True)
 
                             st.markdown(render_compact_persona_card(cluster_id, persona, is_selected),
                                       unsafe_allow_html=True)
-
-                            # Checkbox positioned in top-right corner
-                            if st.checkbox(f"select {persona['name']}",
-                                         key=f"pre_{cluster_id}",
-                                         value=is_selected,
-                                         label_visibility="collapsed"):
-                                if cluster_id not in st.session_state.selected_personas:
-                                    st.session_state.selected_personas.append(cluster_id)
-                            else:
-                                if cluster_id in st.session_state.selected_personas:
-                                    st.session_state.selected_personas.remove(cluster_id)
 
                             st.markdown('</div>', unsafe_allow_html=True)
 
